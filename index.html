@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project priorities</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="print.css" media="print">
+    <script src="index.js" defer></script>
+    <noscript>
+        <link rel="stylesheet" href="noscript.css">
+    </noscript>
+</head>
+<body>
+    <noscript>
+        <p>I haven't made it a priority yet for this to work without JavaScript 😉</p>
+        <p>Want me to? Let me know at <a href="mailto:petar@frontendlane.com">petar@frontendlane.com</a></p>
+        <p>Here's how it looks with JavaScript enabled:</p>
+        <!-- TODO: consider just dumping HTML with intial data as a sample -->
+        <img src="screenshot.png" alt="List of priorities sorted in descending order. Each priority item consists of name, weight, and controls for adjusting weight.">
+    </noscript>
+
+    <header>
+        <h1 contenteditable="true" oninput="updateProjectName(event)">Enter your project name here</h1>
+        <button onclick="window.print()">Print</button>
+    </header>
+
+    <main>
+        <p aria-live="polite" role="status">&nbsp;</p>
+        <div>
+            <button onclick="sort()">Sort</button>
+            <p>Remaining weight: <output id="remaining-weight"></output></p>
+        </div>
+        <ul>
+            <li>
+                <form onsubmit="submitNew(event)">
+                    <label for="new-priority">New priority</label>
+                    <input id="new-priority" placeholder="BEM methodology" required autofocus>
+                    <button>Add</button>
+                </form>
+            </li>
+        </ul>
+    </main>
+</body>
+</html>

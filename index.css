@@ -1,0 +1,111 @@
+/* reusables */
+:root {
+    --natural-text-padding: 1ex 1ch;
+    --natural-line-height: 1.2;
+}
+
+/* resets */
+* {
+    box-sizing: border-box;
+}
+
+button, input {
+    font-size: 1rem;
+}
+
+/* generics */
+button {
+    padding: var(--natural-text-padding);
+}
+
+/* specifics */
+body {
+    max-width: 800px;
+    margin: auto;
+    font-family: Helvetica, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+h1 {
+    flex-grow: 0;
+    word-break: break-all;
+}
+
+div {
+    text-align: right;
+}
+
+#remaining-weight {
+    box-sizing: content-box;
+    min-width: 2ch;
+    display: inline-block;
+    height: 17px;
+    vertical-align: middle;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+/* TODO: must first return focus before continuing with this feature */
+/* .in-edit-mode > li:not(:focus-within) {
+    opacity: .2;
+} */
+
+li:only-child {
+    position: relative;
+}
+
+.done-fetching li:only-child::after {
+    content: 'No priorities means everything\'s equally important and that never works. \A Add your first priority above'; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
+    white-space: pre; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
+    position: absolute;
+    top: calc(100% + 1rem);
+    text-align: center;
+    width: 100%;
+    line-height: 1.2;
+}
+
+li:nth-of-type(even) {
+    background-color: #eee;
+}
+
+li > label {
+    padding: var(--natural-text-padding);
+    min-height: calc(2rem * var(--natural-line-height) + 2 * var(--natural-text-padding));
+    display: flex;
+    align-items: center;
+}
+
+li > input:nth-child(3) {
+    height: calc(2rem * var(--natural-line-height) + 2 * var(--natural-text-padding));
+    padding: var(--natural-text-padding);
+    border: none;
+    background-color: transparent;
+}
+
+li > input[type="range"] {
+    flex-grow: 1;
+}
+
+li > output {
+    padding: var(--natural-text-padding);
+    box-sizing: content-box;
+    flex-basis: 3ch;
+    text-align: center;
+    align-self: center;
+    flex-shrink: 0;
+}
