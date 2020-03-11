@@ -2,8 +2,7 @@
 Tool that helps you get your priorities straight!
 
 # Backlog
-- return focus
-    - when in edit mode dim other priorities
+- when in edit mode dim other priorities
 - disable crement buttons if they can't complete
 - higher priority has greater font size for print
 - 2 seconds after last change, check if sort order would be different and if so offer to re-order

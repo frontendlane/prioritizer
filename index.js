@@ -76,7 +76,7 @@ const priorityList = document.querySelector('ul');
                     
                     const label = document.createElement('label');
                     label.textContent = priority.name;
-                    label.htmlFor = priority.id;
+                    label.htmlFor = `${priority.id}-range`;
                     
                     return [renameButton, label];
                 };
@@ -94,14 +94,14 @@ const priorityList = document.querySelector('ul');
                 const generateRange = priority => {
                     const range = document.createElement('input');
                     range.type = 'range';
-                    range.id = priority.id;
+                    range.id = `${priority.id}-range`;
                     range.name = priority.name;
                     range.value = priority.weight;
                     range.min = 0;
                     range.max = priority.maxWeight;
                     range.onchange = event => {
                         priority.weight = event.target.valueAsNumber;
-                        rinse();
+                        rinse(range);
                     };
 
                     return range;
@@ -115,7 +115,7 @@ const priorityList = document.querySelector('ul');
                         if (newWeight >= 0 && newWeight <= priority.maxWeight) {
                             priority.weight = newWeight;
                         }
-                        rinse();
+                        rinse(crement);
                     };
                     return crement;
                 };
@@ -173,14 +173,13 @@ const priorityList = document.querySelector('ul');
             applyStyles();
         };
 
-    const rinse = () => {
-        // TODO: replace with https://github.com/fczbkk/css-selector-generator
-        focusedElementHtmlId = document.activeElement.id;
+    const rinse = (focusedElement = document.activeElement) => {
+        const focusedElementCssSelector = dompath(focusedElement).toCSS();
 
         unrenderPriorities();
         render();
 
-        document.getElementById(focusedElementHtmlId).focus();
+        document.querySelector(focusedElementCssSelector).focus();
     };
 
     const attachDocumentListeners = () => {
