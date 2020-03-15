@@ -1,137 +1,194 @@
-[
-    {
-        "name": "Ease of use",
-        "id": "ease-of-use",
-        "weight": 1
-    },
-    {
-        "name": "Load speed",
-        "id": "load-speed",
-        "weight": 1
-    },
-    {
-        "name": "Use speed",
-        "id": "use-speed",
-        "weight": 1
-    },
-    {
-        "name": "Privacy",
-        "id": "privacy",
-        "weight": 1
-    },
-    {
-        "name": "Security",
-        "id": "security",
-        "weight": 1
-    },
-    {
-        "name": "Accessibility",
-        "id": "accessibility",
-        "weight": 1
-    },
-    {
-        "name": "Size",
-        "id": "size",
-        "weight": 1
-    },
-    {
-        "name": "SEO",
-        "id": "seo",
-        "weight": 1
-    },
-    {
-        "name": "Works w/o JavaScript",
-        "id": "no-javascript",
-        "weight": 1
-    },
-    {
-        "name": "Usable on mobile",
-        "id": "mobile-usable",
-        "weight": 1
-    },
-    {
-        "name": "Mobile first",
-        "id": "mobile-first",
-        "weight": 1
-    },
-    {
-        "name": "Extensible code",
-        "id": "extensible",
-        "weight": 1
-    },
-    {
-        "name": "Cross-browser",
-        "id": "cross-browser",
-        "weight": 1
-    },
-    {
-        "name": "Cross-OS",
-        "id": "cross-os",
-        "weight": 1
-    },
-    {
-        "name": "Legacy browsers",
-        "id": "legacy",
-        "weight": 1
-    },
-    {
-        "name": "Internationalization",
-        "id": "international",
-        "weight": 1
-    },
-    {
-        "name": "Localization",
-        "id": "localization",
-        "weight": 1
-    },
-    {
-        "name": "Aesthetically pleasing",
-        "id": "aesthetic",
-        "weight": 1
-    },
-    {
-        "name": "Interactive",
-        "id": "interactive",
-        "weight": 1
-    },
-    {
-        "name": "No external assets",
-        "id": "no-externals",
-        "weight": 1
-    },
-    {
-        "name": "Portable (A single HTML file)",
-        "id": "portable",
-        "weight": 1
-    },
-    {
-        "name": "HTML only",
-        "id": "html-only",
-        "weight": 1
-    },
-    {
-        "name": "Responsive design",
-        "id": "responsive",
-        "weight": 1
-    },
-    {
-        "name": "No dependencies",
-        "id": "no-dependency",
-        "weight": 1
-    },
-    {
-        "name": "No obsolete or deprecated code",
-        "id": "latest-code",
-        "weight": 1
-    },
-    {
-        "name": "No global variables",
-        "id": "no-globals",
-        "weight": 1
-    },
-    {
-        "name": "No JS frameworks",
-        "id": "no-framework",
-        "weight": 1
-    }
-]
+{
+    "remainingWeight": 54,
+    "priorities": [
+        {
+            "id": "ease-of-use",
+            "name": "Ease of use",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "load-speed",
+            "name": "Load speed",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "use-speed",
+            "name": "Use speed",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "privacy",
+            "name": "Privacy",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "security",
+            "name": "Security",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "accessibility",
+            "name": "Accessibility",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "size",
+            "name": "Size",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "seo",
+            "name": "SEO",
+            "weight": 1,
+            "maxWeight": 5,
+            "isBeingEdited": false
+        },
+        {
+            "id": "no-javascript",
+            "name": "Works w/o JavaScript",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "mobile-usable",
+            "name": "Usable on mobile",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "mobile-first",
+            "name": "Mobile first",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "extensible",
+            "name": "Extensible code",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "cross-browser",
+            "name": "Cross-browser",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "cross-os",
+            "name": "Cross-OS",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "legacy",
+            "name": "Legacy browsers",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "international",
+            "name": "Internationalization",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "localization",
+            "name": "Localization",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "aesthetic",
+            "name": "Aesthetically pleasing",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "interactive",
+            "name": "Interactive",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "no-externals",
+            "name": "No external assets",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "portable",
+            "name": "Portable (A single HTML file)",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "html-only",
+            "name": "HTML only",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "responsive",
+            "name": "Responsive design",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "no-dependency",
+            "name": "No dependencies",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "latest-code",
+            "name": "No obsolete or deprecated code",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "no-globals",
+            "name": "No global variables",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "no-framework",
+            "name": "No JS frameworks",
+            "weight": 1,
+            "maxWeight": 54,
+            "isBeingEdited": false
+        }
+    ]
+}

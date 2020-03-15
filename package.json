@@ -1,0 +1,23 @@
+{
+  "name": "prioritizer",
+  "version": "1.0.0",
+  "description": "Tool that helps you get your priorities straight!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frontendlane/prioritizer.git"
+  },
+  "keywords": [],
+  "author": "Petar Petrovic <petar@frontendlane.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frontendlane/prioritizer/issues"
+  },
+  "homepage": "https://github.com/frontendlane/prioritizer#readme",
+  "dependencies": {
+    "typescript": "^3.8.3"
+  }
+}

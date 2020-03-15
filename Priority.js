@@ -1,0 +1,9 @@
+const initialWeight = 1;
+export class Priority {
+    constructor({ id = '', name = '', weight = initialWeight, isBeingEdited = false }) {
+        this.id = id;
+        this.name = name;
+        this.weight = weight;
+        this.isBeingEdited = isBeingEdited;
+    }
+}

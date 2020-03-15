@@ -1,0 +1,1 @@
+export const generateIdFromString = (string: string) => string.toLowerCase().replace(/ /g, '-');

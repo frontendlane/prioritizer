@@ -54,16 +54,38 @@ ul {
     padding: 0;
 }
 
+ul.in-edit-mode > li {
+    opacity: .3;
+}
+
+ul.in-edit-mode > li.being-edited {
+    opacity: 1;
+}
+
+ul.in-edit-mode > li.being-edited:focus-within {
+    transform: scale(1.15);
+    position: relative;
+    z-index: 1;
+}
+
+ul.in-edit-mode > li.being-edited:focus-within::before {
+    content: '';
+    position: absolute;
+    top: -1rem;
+    left: -1rem;
+    width: calc(100% + 2rem);
+    height: calc(100% + 2rem);
+    background-color: inherit;
+    z-index: -1;
+    box-shadow: 0 0 .5rem 1px black;
+}
+
 li {
     display: flex;
     justify-content: space-between;
     align-items: stretch;
+    min-height: 45px;
 }
-
-/* TODO: must first return focus before continuing with this feature */
-/* .in-edit-mode > li:not(:focus-within) {
-    opacity: .2;
-} */
 
 li:only-child {
     position: relative;
@@ -79,19 +101,29 @@ li:only-child {
     line-height: 1.2;
 }
 
+li:not(:first-of-type):not(:last-of-type) {
+    margin-top: .2rem;
+}
+
+li:nth-of-type(odd) {
+    background-color: white;
+}
+
 li:nth-of-type(even) {
     background-color: #eee;
 }
 
+li > button {
+    border: 1px solid gray;
+}
+
 li > label {
     padding: var(--natural-text-padding);
-    min-height: calc(2rem * var(--natural-line-height) + 2 * var(--natural-text-padding));
     display: flex;
     align-items: center;
 }
 
 li > input:nth-child(3) {
-    height: calc(2rem * var(--natural-line-height) + 2 * var(--natural-text-padding));
     padding: var(--natural-text-padding);
     border: none;
     background-color: transparent;

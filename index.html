@@ -5,8 +5,7 @@
     <title>Project priorities</title>
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="print.css" media="print">
-    <script src="dependencies/dompath.js" defer></script>
-    <script src="index.js" defer></script>
+    <script src="index.js" type="module"></script>
     <noscript>
         <link rel="stylesheet" href="noscript.css">
     </noscript>
@@ -21,19 +20,20 @@
     </noscript>
 
     <header>
-        <h1 contenteditable="true" oninput="updateProjectName(event)">Enter your project name here</h1>
+        <h1 contenteditable="true">Enter your project name here</h1>
         <button onclick="window.print()">Print</button>
     </header>
 
     <main>
         <p aria-live="polite" role="status">&nbsp;</p>
         <div>
-            <button onclick="sort()">Sort</button>
+            <button id="undo">Undo</button>
+            <button id="sort">Sort</button>
             <p>Remaining weight: <output id="remaining-weight"></output></p>
         </div>
         <ul>
             <li>
-                <form onsubmit="submitNew(event)">
+                <form>
                     <label for="new-priority">New priority</label>
                     <input id="new-priority" placeholder="BEM methodology" required autofocus>
                     <button>Add</button>
