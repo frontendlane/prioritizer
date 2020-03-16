@@ -21,6 +21,20 @@ const generateDeleteButton = (id: string) => {
     return deleteButton;
 };
 
+const cancel = (priority: TPriority, elementToFocus: HTMLElement) => {
+    const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
+    const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
+    updatedPriority.isBeingEdited = false;
+    update(updatedGroup, elementToFocus);
+};
+
+const generateCancelButton = (priority: TPriority): HTMLButtonElement => {
+    const cancelButton: HTMLButtonElement = document.createElement('button');
+    cancelButton.textContent = '❌';
+    cancelButton.onclick = () => cancel(priority, cancelButton);
+    return cancelButton;
+};
+
 const generateSaveButtonAndRenameInput = (priority: TPriority): [HTMLButtonElement, HTMLInputElement] => {
     const renameInput: HTMLInputElement = generateRenameInput(priority);
 
@@ -46,10 +60,7 @@ const generateRenameInput = (priority: TPriority): HTMLInputElement => {
     renameInput.value = priority.name;
     renameInput.onkeyup = event => {
         if (event.code === 'Escape') {
-            const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
-            const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
-            updatedPriority.isBeingEdited = false;
-            update(updatedGroup, renameInput);
+            cancel(priority, renameInput);
         }
     };
     return renameInput;
@@ -129,6 +140,7 @@ const renderPriorityBeingEdited = (priority: TPriority): HTMLLIElement => {
     priorityItem.id = priority.id;
     priorityItem.append(
         generateDeleteButton(priority.id),
+        generateCancelButton(priority),
         ...generateSaveButtonAndRenameInput(priority),
         generateRange(priority),
         generateCrement(priority, { text: '⊖', value: -1 }),

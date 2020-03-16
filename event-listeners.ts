@@ -16,7 +16,7 @@ const updateProjectName = (event: Event) => {
     const selection: Selection = document.getSelection() as Selection;
     const caretIndex: number = selection.focusOffset;
     const h1: HTMLHeadingElement = event.target as HTMLHeadingElement;
-    const projectName: string = h1.innerText;
+    const projectName: string = h1.textContent as string;
     document.title = `${projectName} priorities`;
 
     setTimeout(() => {

@@ -51,6 +51,8 @@ Tool that helps you get your priorities straight!
     Security
     Developer comfort
     - some more categories: https://frontendchecklist.io/#section-accessibility
-- create my own css selector generating library that doesn't use id or classes but rather only child selectors. that way i get rid of || 'body'
+- create my own css selector generating library that doesn't use id or classes but rather only child selectors
+    - the library should always include element name in the selector. that solves the issue of clicking rename button and having save button get focused
+    - that way i get rid of || 'body'
 - once you rank projects, then order them in the chronological order from most urgent to least urgent
 - better fetch error handling

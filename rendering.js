@@ -15,6 +15,12 @@ const generateDeleteButton = (id) => {
     };
     return deleteButton;
 };
+const generateCancelButton = (priority) => {
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = '❌';
+    cancelButton.onclick = () => cancel(priority, cancelButton);
+    return cancelButton;
+};
 const generateSaveButtonAndRenameInput = (priority) => {
     const renameInput = generateRenameInput(priority);
     const saveButton = document.createElement('button');
@@ -31,15 +37,18 @@ const generateSaveButtonAndRenameInput = (priority) => {
     };
     return [saveButton, renameInput];
 };
+const cancel = (priority, elementToFocus) => {
+    const updatedGroup = deepCloneObject(group);
+    const updatedPriority = findPriority(updatedGroup, priority.id);
+    updatedPriority.isBeingEdited = false;
+    update(updatedGroup, elementToFocus);
+};
 const generateRenameInput = (priority) => {
     const renameInput = document.createElement('input');
     renameInput.value = priority.name;
     renameInput.onkeyup = event => {
         if (event.code === 'Escape') {
-            const updatedGroup = deepCloneObject(group);
-            const updatedPriority = findPriority(updatedGroup, priority.id);
-            updatedPriority.isBeingEdited = false;
-            update(updatedGroup, renameInput);
+            cancel(priority, renameInput);
         }
     };
     return renameInput;
@@ -105,7 +114,7 @@ const renderPriorities = () => {
 const renderPriorityBeingEdited = (priority) => {
     const priorityItem = document.createElement('li');
     priorityItem.id = priority.id;
-    priorityItem.append(generateDeleteButton(priority.id), ...generateSaveButtonAndRenameInput(priority), generateRange(priority), generateCrement(priority, { text: '⊖', value: -1 }), generateOutput(priority), generateCrement(priority, { text: '⊕', value: 1 }));
+    priorityItem.append(generateDeleteButton(priority.id), generateCancelButton(priority), ...generateSaveButtonAndRenameInput(priority), generateRange(priority), generateCrement(priority, { text: '⊖', value: -1 }), generateOutput(priority), generateCrement(priority, { text: '⊕', value: 1 }));
     priorityItem.classList.add('being-edited');
     priorityList.classList.add('in-edit-mode');
     return priorityItem;

@@ -12,7 +12,7 @@ const updateProjectName = (event) => {
     const selection = document.getSelection();
     const caretIndex = selection.focusOffset;
     const h1 = event.target;
-    const projectName = h1.innerText;
+    const projectName = h1.textContent;
     document.title = `${projectName} priorities`;
     setTimeout(() => {
         h1.innerHTML = projectName;
