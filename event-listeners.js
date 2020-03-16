@@ -38,7 +38,7 @@ const submitNew = (event) => {
     submitEvent.preventDefault();
     const input = document.getElementById('new-priority');
     const name = input.value.trim();
-    const id = generateIdFromString(name);
+    const id = `fel-prioritizer-${generateIdFromString(name)}`;
     const doesAlreadyExist = group.priorities.some((priority) => id === priority.id);
     doesAlreadyExist
         ? setTooltip('There\'s already a priority with that name')
