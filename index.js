@@ -4,7 +4,7 @@ import { attachListeners } from './event-listeners.js';
 import { unrender, render } from './rendering.js';
 export let group = new Group({});
 export const groupHistory = [];
-const weightFactor = 3;
+export const weightFactor = 3;
 const calcRemainingWeight = (group) => {
     const totalMaxWeight = group.priorities.length * weightFactor;
     const usedWeight = group.priorities

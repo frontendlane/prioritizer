@@ -1,18 +1,41 @@
 import { deepCloneObject } from './deep-clone.js';
 import { isBetween } from './is-between.js';
-import { generateIdFromString } from './utils.js';
-import { group, update } from './index.js';
+import { generateIdFromString, findPriority, slim } from './utils.js';
+import { group, update, weightFactor } from './index.js';
+import { setTooltip } from './event-listeners.js';
 import domPath from './dom-path.js';
 const priorityList = document.querySelector('ul');
-const findPriority = (group, id) => group.priorities.find((priority) => priority.id === id);
+const deletePriorityAndSlim = (id, weightToSlim, elementToFocus) => {
+    const smallerGroup = deepCloneObject(group);
+    smallerGroup.priorities = smallerGroup.priorities.filter((priority) => priority.id !== id);
+    let groupForUpdate = deepCloneObject(smallerGroup);
+    for (let i = 0; i < weightToSlim; i++) {
+        groupForUpdate = slim(groupForUpdate, smallerGroup);
+    }
+    update(groupForUpdate, elementToFocus);
+};
+const confirmSlimming = (priority, elementToFocus) => {
+    const weightToSlim = weightFactor - group.remainingWeight - priority.weight;
+    const shouldAutoSlim = confirm(`"${priority.name}"'s weight is being used on other priorities. To ensure priorities maintain their relative importance you should free up ${weightToSlim} weight from other priorities. Prioritizer can automaticaly remove this weight but this may change relative importance of your priorities. Do you want Prioritizer to automatically free up weight?`);
+    shouldAutoSlim
+        ? deletePriorityAndSlim(priority.id, weightToSlim, elementToFocus)
+        : setTooltip(`You need to free up ${weightToSlim} weights in order to delete "${priority.name}" without Prioritizer (incorectly) automatically freeing up weights for you.`);
+};
+const deletePriority = (id, elementToFocus) => {
+    const updatedGroup = deepCloneObject(group);
+    updatedGroup.priorities = updatedGroup.priorities.filter((priority) => priority.id !== id);
+    update(updatedGroup, elementToFocus);
+};
 const generateDeleteButton = (id) => {
     const deleteButton = document.createElement('button');
     deleteButton.textContent = '🗑';
     deleteButton.classList.add('delete-button');
     deleteButton.onclick = () => {
-        const updatedGroup = deepCloneObject(group);
-        updatedGroup.priorities = updatedGroup.priorities.filter((priority) => priority.id !== id);
-        update(updatedGroup, deleteButton);
+        const priority = group.priorities.find((priority) => priority.id === id);
+        const requiresSlimming = group.remainingWeight + priority.weight < weightFactor;
+        requiresSlimming
+            ? confirmSlimming(priority, deleteButton)
+            : deletePriority(id, deleteButton);
     };
     return deleteButton;
 };

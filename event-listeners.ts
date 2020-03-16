@@ -36,7 +36,7 @@ const add = ({id, name}: {id: string, name: string}, elementToFocus: HTMLButtonE
 const getTooltip = (): HTMLParagraphElement => document.querySelector('[aria-live="polite"][role="status"]') as HTMLParagraphElement;
 const clearTooltip = (tooltip: HTMLParagraphElement = getTooltip()) => tooltip.innerHTML = '&nbsp;';
 
-const setTooltip = (text: string) => {
+export const setTooltip = (text: string) => {
     const tooltipElement: HTMLParagraphElement = getTooltip();
     clearTooltip(tooltipElement);
     setTimeout(() => tooltipElement.textContent = text, 50);

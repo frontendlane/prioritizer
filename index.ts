@@ -7,7 +7,7 @@ import { unrender, render } from './rendering.js';
 export let group: TGroup = new Group({});
 export const groupHistory: TGroup[] = [];
 
-const weightFactor: number = 3;
+export const weightFactor: number = 3;
 
 const calcRemainingWeight = (group: TGroup): number => {
     const totalMaxWeight = group.priorities.length * weightFactor;

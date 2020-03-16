@@ -13,6 +13,14 @@ export type TPriority = {
     isBeingEdited: boolean
 };
 
+export type TPrioritySlimRatio = {
+    id: string,
+    name: string,
+    weight: number,
+    isBeingEdited: boolean,
+    slimRatio: number
+};
+
 export interface IPriority {
     id?: string,
     name?: string,

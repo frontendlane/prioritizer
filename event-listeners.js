@@ -28,7 +28,7 @@ const add = ({ id, name }, elementToFocus, form) => {
 };
 const getTooltip = () => document.querySelector('[aria-live="polite"][role="status"]');
 const clearTooltip = (tooltip = getTooltip()) => tooltip.innerHTML = '&nbsp;';
-const setTooltip = (text) => {
+export const setTooltip = (text) => {
     const tooltipElement = getTooltip();
     clearTooltip(tooltipElement);
     setTimeout(() => tooltipElement.textContent = text, 50);

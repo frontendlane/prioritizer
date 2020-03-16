@@ -1,23 +1,47 @@
 import { HTMLInputRangeElement, TPriority, TGroup } from './types';
 import { deepCloneObject } from './deep-clone.js';
 import { isBetween } from './is-between.js';
-import { generateIdFromString } from './utils.js';
-import { group, update } from './index.js';
+import { generateIdFromString, findPriority, slim } from './utils.js';
+import { group, update, weightFactor } from './index.js';
+import { setTooltip } from './event-listeners.js';
 import domPath from './dom-path.js';
 
 const priorityList: HTMLUListElement = document.querySelector('ul') as HTMLUListElement;
 
-const findPriority = (group: TGroup, id: string): TPriority =>
-    group.priorities.find((priority: TPriority) => priority.id === id) as TPriority;
+const deletePriorityAndSlim = (id: string, weightToSlim: number, elementToFocus: HTMLButtonElement) => {
+    const smallerGroup: TGroup = deepCloneObject(group) as TGroup;
+    smallerGroup.priorities = smallerGroup.priorities.filter((priority: TPriority) => priority.id !== id);
+    let groupForUpdate: TGroup = deepCloneObject(smallerGroup) as TGroup;
+    for (let i: number = 0; i < weightToSlim; i++) {
+        groupForUpdate = slim(groupForUpdate, smallerGroup);
+    }
+    update(groupForUpdate, elementToFocus);
+};
+
+const confirmSlimming = (priority: TPriority, elementToFocus: HTMLButtonElement) => {
+    const weightToSlim: number = weightFactor - group.remainingWeight - priority.weight;
+    const shouldAutoSlim: boolean = confirm(`"${priority.name}"'s weight is being used on other priorities. To ensure priorities maintain their relative importance you should free up ${weightToSlim} weight from other priorities. Prioritizer can automaticaly remove this weight but this may change relative importance of your priorities. Do you want Prioritizer to automatically free up weight?`);
+    shouldAutoSlim
+        ? deletePriorityAndSlim(priority.id, weightToSlim, elementToFocus)
+        : setTooltip(`You need to free up ${weightToSlim} weights in order to delete "${priority.name}" without Prioritizer (incorectly) automatically freeing up weights for you.`);
+};
+
+const deletePriority = (id: string, elementToFocus: HTMLButtonElement) => {
+    const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
+    updatedGroup.priorities = updatedGroup.priorities.filter((priority: TPriority) => priority.id !== id);        
+    update(updatedGroup, elementToFocus);
+};
 
 const generateDeleteButton = (id: string) => {
     const deleteButton: HTMLButtonElement = document.createElement('button');
     deleteButton.textContent = '🗑';
     deleteButton.classList.add('delete-button');
     deleteButton.onclick = () => {
-        const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
-        updatedGroup.priorities = updatedGroup.priorities.filter((priority: TPriority) => priority.id !== id);
-        update(updatedGroup, deleteButton);
+        const priority: TPriority = group.priorities.find((priority: TPriority) => priority.id === id) as TPriority;
+        const requiresSlimming: boolean = group.remainingWeight + priority.weight < weightFactor;
+        requiresSlimming
+            ? confirmSlimming(priority, deleteButton)
+            : deletePriority(id, deleteButton);
     };
     return deleteButton;
 };

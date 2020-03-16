@@ -5,7 +5,6 @@ Live at https://frontendlane.github.io/prioritizer/
 
 # Todo
 ## bugs
-- if all weights are expended and an item with no weight is deleted a negative weight is reported
 - add aria-label to emoji buttons
 
 ## ui
@@ -20,6 +19,7 @@ Live at https://frontendlane.github.io/prioritizer/
 - add SASS
 
 ## code quality
+- format document on save
 - add ESLint
     - auto format on save
         - formatting .ts should place a space between 'constructor('
@@ -38,6 +38,8 @@ Live at https://frontendlane.github.io/prioritizer/
     - store project name as well (and page title)
 - persistance in localStorage or whatever devdocs.io does
 - ability to store and view priorities for multiple projects, optionally simultaneously
+- slider size should indicate how much weight a priority has, or should it be indicated by some (colored) bars next to each priority??
+- generate priority weight graph for print
 
 ## backlog
 - make it shareable. shorten url project
