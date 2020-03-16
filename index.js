@@ -32,11 +32,13 @@ const queryClosest = (cssSelector) => {
     }
     return closest;
 };
-export const update = (updatedGroup, focusedElement = document.activeElement) => {
-    const cssSelector = domPath(focusedElement).toCSS();
+export const update = (updatedGroup, elementToFocus = document.activeElement) => {
+    const cssSelector = typeof elementToFocus === 'string'
+        ? elementToFocus
+        : domPath(elementToFocus).toCSS();
     addToHistory(group);
     rinseDOM(updatedGroup);
-    const elementToFocus = queryClosest(cssSelector);
+    elementToFocus = queryClosest(cssSelector);
     elementToFocus.focus();
 };
 const init = () => fetch('initial-data.json')

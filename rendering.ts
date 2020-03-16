@@ -3,6 +3,7 @@ import { deepCloneObject } from './deep-clone.js';
 import { isBetween } from './is-between.js';
 import { generateIdFromString } from './utils.js';
 import { group, update } from './index.js';
+import domPath from './dom-path.js';
 
 const priorityList: HTMLUListElement = document.querySelector('ul') as HTMLUListElement;
 
@@ -35,6 +36,18 @@ const generateCancelButton = (priority: TPriority): HTMLButtonElement => {
     return cancelButton;
 };
 
+const generateRenameInput = (priority: TPriority): HTMLInputElement => {
+    const renameInput: HTMLInputElement = document.createElement('input');
+    renameInput.type = 'text';
+    renameInput.value = priority.name;
+    renameInput.onkeyup = event => {
+        if (event.code === 'Escape') {
+            cancel(priority, renameInput);
+        }
+    };
+    return renameInput;
+};
+
 const generateSaveButtonAndRenameInput = (priority: TPriority): [HTMLButtonElement, HTMLInputElement] => {
     const renameInput: HTMLInputElement = generateRenameInput(priority);
 
@@ -53,17 +66,6 @@ const generateSaveButtonAndRenameInput = (priority: TPriority): [HTMLButtonEleme
     };
 
     return [saveButton, renameInput];
-};
-
-const generateRenameInput = (priority: TPriority): HTMLInputElement => {
-    const renameInput: HTMLInputElement = document.createElement('input');
-    renameInput.value = priority.name;
-    renameInput.onkeyup = event => {
-        if (event.code === 'Escape') {
-            cancel(priority, renameInput);
-        }
-    };
-    return renameInput;
 };
 
 const generateRange = (priority: TPriority): HTMLInputRangeElement => {
@@ -109,11 +111,13 @@ const generateRenameButtonAndLabel = (priority: TPriority) => {
     const renameButton: HTMLButtonElement = document.createElement('button');
     renameButton.textContent = '✏️';
     renameButton.classList.add('rename-button');
-    renameButton.onclick = () => {
+    renameButton.onclick = (event: Event) => {
         const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
         const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
         updatedPriority.isBeingEdited = true;
-        update(updatedGroup, renameButton);
+        const container: HTMLLIElement = (event.target as HTMLButtonElement).closest('li') as HTMLLIElement;
+        const elementToFocus: string = domPath(container).toCSS() + ' > input[type="text"]';
+        update(updatedGroup, elementToFocus);
     };
 
     const label: HTMLLabelElement = document.createElement('label');
@@ -155,6 +159,7 @@ const renderPriorityBeingEdited = (priority: TPriority): HTMLLIElement => {
 const renderPriority = (priority: TPriority): HTMLLIElement => {
     const priorityItem: HTMLLIElement = document.createElement('li');
     priorityItem.id = priority.id;
+    priorityItem.tabIndex = -1;
     priorityItem.append(
         generateDeleteButton(priority.id),
         ...generateRenameButtonAndLabel(priority),

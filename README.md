@@ -1,10 +1,10 @@
 # Prioritizer
 Tool that helps you get your priorities straight!
 
+Live at https://frontendlane.github.io/prioritizer/
+
 # Todo
 ## bugs
-- clicking rename should focus input
-    - move focus to chronologically last li that got click rename. bug with ordering, always places focuse on the DOM last li
 - if all weights are expended and an item with no weight is deleted a negative weight is reported
 - add aria-label to emoji buttons
 
@@ -53,6 +53,6 @@ Tool that helps you get your priorities straight!
     - some more categories: https://frontendchecklist.io/#section-accessibility
 - create my own css selector generating library that doesn't use id or classes but rather only child selectors
     - the library should always include element name in the selector. that solves the issue of clicking rename button and having save button get focused
-    - that way i get rid of || 'body'
+    - that way i get rid of `|| 'body'`
 - once you rank projects, then order them in the chronological order from most urgent to least urgent
 - better fetch error handling

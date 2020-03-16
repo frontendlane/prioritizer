@@ -42,13 +42,15 @@ const queryClosest = (cssSelector: string): HTMLElement => {
     return closest as HTMLElement;
 };
 
-export const update = (updatedGroup: TGroup, focusedElement: HTMLElement = document.activeElement as HTMLElement) => {
-    const cssSelector: string = domPath(focusedElement).toCSS();
+export const update = (updatedGroup: TGroup, elementToFocus: string | HTMLElement = document.activeElement as HTMLElement) => {
+    const cssSelector: string = typeof elementToFocus === 'string'
+        ? elementToFocus
+        : domPath(elementToFocus).toCSS();
 
     addToHistory(group);
     rinseDOM(updatedGroup);
 
-    const elementToFocus: HTMLElement = queryClosest(cssSelector);
+    elementToFocus = queryClosest(cssSelector);
     elementToFocus.focus();
 };
 

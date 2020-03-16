@@ -2,6 +2,7 @@ import { deepCloneObject } from './deep-clone.js';
 import { isBetween } from './is-between.js';
 import { generateIdFromString } from './utils.js';
 import { group, update } from './index.js';
+import domPath from './dom-path.js';
 const priorityList = document.querySelector('ul');
 const findPriority = (group, id) => group.priorities.find((priority) => priority.id === id);
 const generateDeleteButton = (id) => {
@@ -15,11 +16,28 @@ const generateDeleteButton = (id) => {
     };
     return deleteButton;
 };
+const cancel = (priority, elementToFocus) => {
+    const updatedGroup = deepCloneObject(group);
+    const updatedPriority = findPriority(updatedGroup, priority.id);
+    updatedPriority.isBeingEdited = false;
+    update(updatedGroup, elementToFocus);
+};
 const generateCancelButton = (priority) => {
     const cancelButton = document.createElement('button');
     cancelButton.textContent = '❌';
     cancelButton.onclick = () => cancel(priority, cancelButton);
     return cancelButton;
+};
+const generateRenameInput = (priority) => {
+    const renameInput = document.createElement('input');
+    renameInput.type = 'text';
+    renameInput.value = priority.name;
+    renameInput.onkeyup = event => {
+        if (event.code === 'Escape') {
+            cancel(priority, renameInput);
+        }
+    };
+    return renameInput;
 };
 const generateSaveButtonAndRenameInput = (priority) => {
     const renameInput = generateRenameInput(priority);
@@ -36,22 +54,6 @@ const generateSaveButtonAndRenameInput = (priority) => {
         update(updatedGroup, saveButton);
     };
     return [saveButton, renameInput];
-};
-const cancel = (priority, elementToFocus) => {
-    const updatedGroup = deepCloneObject(group);
-    const updatedPriority = findPriority(updatedGroup, priority.id);
-    updatedPriority.isBeingEdited = false;
-    update(updatedGroup, elementToFocus);
-};
-const generateRenameInput = (priority) => {
-    const renameInput = document.createElement('input');
-    renameInput.value = priority.name;
-    renameInput.onkeyup = event => {
-        if (event.code === 'Escape') {
-            cancel(priority, renameInput);
-        }
-    };
-    return renameInput;
 };
 const generateRange = (priority) => {
     const range = document.createElement('input');
@@ -92,11 +94,13 @@ const generateRenameButtonAndLabel = (priority) => {
     const renameButton = document.createElement('button');
     renameButton.textContent = '✏️';
     renameButton.classList.add('rename-button');
-    renameButton.onclick = () => {
+    renameButton.onclick = (event) => {
         const updatedGroup = deepCloneObject(group);
         const updatedPriority = findPriority(updatedGroup, priority.id);
         updatedPriority.isBeingEdited = true;
-        update(updatedGroup, renameButton);
+        const container = event.target.closest('li');
+        const elementToFocus = domPath(container).toCSS() + ' > input[type="text"]';
+        update(updatedGroup, elementToFocus);
     };
     const label = document.createElement('label');
     label.textContent = priority.name;
@@ -122,6 +126,7 @@ const renderPriorityBeingEdited = (priority) => {
 const renderPriority = (priority) => {
     const priorityItem = document.createElement('li');
     priorityItem.id = priority.id;
+    priorityItem.tabIndex = -1;
     priorityItem.append(generateDeleteButton(priority.id), ...generateRenameButtonAndLabel(priority), generateRange(priority), generateCrement(priority, { text: '⊖', value: -1 }), generateOutput(priority), generateCrement(priority, { text: '⊕', value: 1 }));
     return priorityItem;
 };

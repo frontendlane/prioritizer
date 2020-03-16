@@ -101,7 +101,7 @@ li:only-child {
 }
 
 li:not(:first-of-type):not(:last-of-type) {
-    margin-top: .2rem;
+    margin-bottom: .2rem;
 }
 
 li:nth-of-type(odd) {
