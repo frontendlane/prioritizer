@@ -1,4 +1,4 @@
-import { HTMLInputRangeElement, TPriority, TGroup } from './types';
+import { HTMLInputRangeElement, TPriority, TGroup, TCrements, TCrement } from './types';
 import { deepCloneObject } from './deep-clone.js';
 import { isBetween } from './is-between.js';
 import { generateIdFromString, findPriority, slim } from './utils.js';
@@ -32,16 +32,16 @@ const deletePriority = (id: string, elementToFocus: HTMLButtonElement) => {
     update(updatedGroup, elementToFocus);
 };
 
-const generateDeleteButton = (id: string) => {
+const generateDeleteButton = (priority: TPriority) => {
     const deleteButton: HTMLButtonElement = document.createElement('button');
     deleteButton.textContent = '🗑';
+    deleteButton.setAttribute('aria-label', `Delete "${priority.name}"`);
     deleteButton.classList.add('delete-button');
     deleteButton.onclick = () => {
-        const priority: TPriority = group.priorities.find((priority: TPriority) => priority.id === id) as TPriority;
         const requiresSlimming: boolean = group.remainingWeight + priority.weight < weightFactor;
         requiresSlimming
             ? confirmSlimming(priority, deleteButton)
-            : deletePriority(id, deleteButton);
+            : deletePriority(priority.id, deleteButton);
     };
     return deleteButton;
 };
@@ -56,6 +56,7 @@ const cancel = (priority: TPriority, elementToFocus: HTMLElement) => {
 const generateCancelButton = (priority: TPriority): HTMLButtonElement => {
     const cancelButton: HTMLButtonElement = document.createElement('button');
     cancelButton.textContent = '❌';
+    cancelButton.setAttribute('aria-label', `Cancel renaming "${priority.name}"`);
     cancelButton.onclick = () => cancel(priority, cancelButton);
     return cancelButton;
 };
@@ -77,6 +78,7 @@ const generateSaveButtonAndRenameInput = (priority: TPriority): [HTMLButtonEleme
 
     const saveButton: HTMLButtonElement = document.createElement('button');
     saveButton.textContent = '💾';
+    saveButton.setAttribute('aria-label', `Save name change for "${priority.name}"`);
     saveButton.classList.add('save-button');
     saveButton.onclick = () => {
         const value: string = renameInput.value.trim();
@@ -92,37 +94,38 @@ const generateSaveButtonAndRenameInput = (priority: TPriority): [HTMLButtonEleme
     return [saveButton, renameInput];
 };
 
-const generateRange = (priority: TPriority): HTMLInputRangeElement => {
-    const range: HTMLInputRangeElement = document.createElement('input');
-    range.type = 'range';
-    range.id = `${priority.id}-range`;
-    range.name = priority.name;
-    range.value = `${priority.weight}`;
-    range.min = '0';
-    range.max = `${priority.weight + group.remainingWeight}`;
-    range.onchange = () => {
+const generateRangeInput = (priority: TPriority): HTMLInputRangeElement => {
+    const rangeInput: HTMLInputRangeElement = document.createElement('input');
+    rangeInput.type = 'range';
+    rangeInput.id = `${priority.id}-range`;
+    rangeInput.name = priority.name;
+    rangeInput.value = `${priority.weight}`;
+    rangeInput.min = '0';
+    rangeInput.max = `${priority.weight + group.remainingWeight}`;
+    rangeInput.onchange = () => {
         const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
         const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
-        updatedPriority.weight = range.valueAsNumber;
-        update(updatedGroup, range);
+        updatedPriority.weight = rangeInput.valueAsNumber;
+        update(updatedGroup, rangeInput);
     };
 
-    return range;
+    return rangeInput;
 };
 
-const generateCrement = (priority: TPriority, props: { text: string, value: number }): HTMLButtonElement => {
-    const crement: HTMLButtonElement = document.createElement('button');
-    crement.textContent = props.text;
-    crement.onclick = () => {
-        const newWeight = priority.weight + props.value;
+const generateCrementButton = (priority: TPriority, crement: TCrement): HTMLButtonElement => {
+    const crementButton: HTMLButtonElement = document.createElement('button');
+    crementButton.append(crement.icon);
+    crementButton.setAttribute('aria-label', `${crement.stepAction} "${priority.name}"`);
+    crementButton.onclick = () => {
+        const newWeight = priority.weight + crement.stepValue;
         if (isBetween('0<=', newWeight, `<=${priority.weight + group.remainingWeight}`)) {
             const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
             const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
             updatedPriority.weight = newWeight;
-            update(updatedGroup, crement);
+            update(updatedGroup, crementButton);
         }
     };
-    return crement;
+    return crementButton;
 };
 
 const generateOutput = (priority: TPriority): HTMLOutputElement => {
@@ -134,6 +137,7 @@ const generateOutput = (priority: TPriority): HTMLOutputElement => {
 const generateRenameButtonAndLabel = (priority: TPriority) => {
     const renameButton: HTMLButtonElement = document.createElement('button');
     renameButton.textContent = '✏️';
+    renameButton.setAttribute('aria-label', `Rename "${priority.name}"`);
     renameButton.classList.add('rename-button');
     renameButton.onclick = (event: Event) => {
         const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
@@ -151,48 +155,52 @@ const generateRenameButtonAndLabel = (priority: TPriority) => {
     return [renameButton, label];
 };
 
-const renderPriorities = () => {
-    const prioritiesToRender: HTMLLIElement[] = group.priorities.map((priority: TPriority): HTMLLIElement =>
-        priority.isBeingEdited
-            ? renderPriorityBeingEdited(priority)
-            : renderPriority(priority)
-    );
-
-    priorityList.append(...prioritiesToRender);
-    const remainingWeight: HTMLOutputElement = document.getElementById('remaining-weight') as HTMLOutputElement;
-    remainingWeight.textContent = `${group.remainingWeight}`;
-};
-
-const renderPriorityBeingEdited = (priority: TPriority): HTMLLIElement => {
+const renderPriorityBeingEdited = (priority: TPriority, crements: TCrements): HTMLLIElement => {
     const priorityItem: HTMLLIElement = document.createElement('li');
     priorityItem.id = priority.id;
     priorityItem.append(
-        generateDeleteButton(priority.id),
+        generateDeleteButton(priority),
         generateCancelButton(priority),
         ...generateSaveButtonAndRenameInput(priority),
-        generateRange(priority),
-        generateCrement(priority, { text: '⊖', value: -1 }),
+        generateRangeInput(priority),
+        generateCrementButton(priority, crements.decrement),
         generateOutput(priority),
-        generateCrement(priority, { text: '⊕', value: 1 })
+        generateCrementButton(priority, crements.increment)
     );
     priorityItem.classList.add('being-edited');
     priorityList.classList.add('in-edit-mode');
     return priorityItem;
 };
 
-const renderPriority = (priority: TPriority): HTMLLIElement => {
+const renderPriority = (priority: TPriority, crements: TCrements): HTMLLIElement => {
     const priorityItem: HTMLLIElement = document.createElement('li');
     priorityItem.id = priority.id;
     priorityItem.tabIndex = -1;
     priorityItem.append(
-        generateDeleteButton(priority.id),
+        generateDeleteButton(priority),
         ...generateRenameButtonAndLabel(priority),
-        generateRange(priority),
-        generateCrement(priority, { text: '⊖', value: -1 }),
+        generateRangeInput(priority),
+        generateCrementButton(priority, crements.decrement),
         generateOutput(priority),
-        generateCrement(priority, { text: '⊕', value: 1 })
+        generateCrementButton(priority, crements.increment)
     );
     return priorityItem;
+};
+
+const renderPriorities = () => {
+    const crements: TCrements = {
+        decrement: { icon: '⊖', stepAction: 'Decrement', stepValue: -1 },
+        increment: { icon: '⊕', stepAction: 'Increment', stepValue: 1 }
+    };
+    const prioritiesToRender: HTMLLIElement[] = group.priorities.map((priority: TPriority): HTMLLIElement =>
+        priority.isBeingEdited
+            ? renderPriorityBeingEdited(priority, crements)
+            : renderPriority(priority, crements)
+    );
+
+    priorityList.append(...prioritiesToRender);
+    const remainingWeight: HTMLOutputElement = document.getElementById('remaining-weight') as HTMLOutputElement;
+    remainingWeight.textContent = `${group.remainingWeight}`;
 };
 
 const setMinWidth = () => {

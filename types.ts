@@ -37,3 +37,14 @@ export interface IGroup {
     priorities?: TPriority[],
     remainingWeight?: number
 }
+
+export type TCrement = {
+    icon: string,
+    stepAction: string,
+    stepValue: number
+};
+
+export type TCrements = {
+    decrement: TCrement,
+    increment: TCrement
+};

@@ -26,16 +26,16 @@ const deletePriority = (id, elementToFocus) => {
     updatedGroup.priorities = updatedGroup.priorities.filter((priority) => priority.id !== id);
     update(updatedGroup, elementToFocus);
 };
-const generateDeleteButton = (id) => {
+const generateDeleteButton = (priority) => {
     const deleteButton = document.createElement('button');
     deleteButton.textContent = '🗑';
+    deleteButton.setAttribute('aria-label', `Delete "${priority.name}"`);
     deleteButton.classList.add('delete-button');
     deleteButton.onclick = () => {
-        const priority = group.priorities.find((priority) => priority.id === id);
         const requiresSlimming = group.remainingWeight + priority.weight < weightFactor;
         requiresSlimming
             ? confirmSlimming(priority, deleteButton)
-            : deletePriority(id, deleteButton);
+            : deletePriority(priority.id, deleteButton);
     };
     return deleteButton;
 };
@@ -48,6 +48,7 @@ const cancel = (priority, elementToFocus) => {
 const generateCancelButton = (priority) => {
     const cancelButton = document.createElement('button');
     cancelButton.textContent = '❌';
+    cancelButton.setAttribute('aria-label', `Cancel renaming "${priority.name}"`);
     cancelButton.onclick = () => cancel(priority, cancelButton);
     return cancelButton;
 };
@@ -66,6 +67,7 @@ const generateSaveButtonAndRenameInput = (priority) => {
     const renameInput = generateRenameInput(priority);
     const saveButton = document.createElement('button');
     saveButton.textContent = '💾';
+    saveButton.setAttribute('aria-label', `Save name change for "${priority.name}"`);
     saveButton.classList.add('save-button');
     saveButton.onclick = () => {
         const value = renameInput.value.trim();
@@ -78,35 +80,36 @@ const generateSaveButtonAndRenameInput = (priority) => {
     };
     return [saveButton, renameInput];
 };
-const generateRange = (priority) => {
-    const range = document.createElement('input');
-    range.type = 'range';
-    range.id = `${priority.id}-range`;
-    range.name = priority.name;
-    range.value = `${priority.weight}`;
-    range.min = '0';
-    range.max = `${priority.weight + group.remainingWeight}`;
-    range.onchange = () => {
+const generateRangeInput = (priority) => {
+    const rangeInput = document.createElement('input');
+    rangeInput.type = 'range';
+    rangeInput.id = `${priority.id}-range`;
+    rangeInput.name = priority.name;
+    rangeInput.value = `${priority.weight}`;
+    rangeInput.min = '0';
+    rangeInput.max = `${priority.weight + group.remainingWeight}`;
+    rangeInput.onchange = () => {
         const updatedGroup = deepCloneObject(group);
         const updatedPriority = findPriority(updatedGroup, priority.id);
-        updatedPriority.weight = range.valueAsNumber;
-        update(updatedGroup, range);
+        updatedPriority.weight = rangeInput.valueAsNumber;
+        update(updatedGroup, rangeInput);
     };
-    return range;
+    return rangeInput;
 };
-const generateCrement = (priority, props) => {
-    const crement = document.createElement('button');
-    crement.textContent = props.text;
-    crement.onclick = () => {
-        const newWeight = priority.weight + props.value;
+const generateCrementButton = (priority, crement) => {
+    const crementButton = document.createElement('button');
+    crementButton.append(crement.icon);
+    crementButton.setAttribute('aria-label', `${crement.stepAction} "${priority.name}"`);
+    crementButton.onclick = () => {
+        const newWeight = priority.weight + crement.stepValue;
         if (isBetween('0<=', newWeight, `<=${priority.weight + group.remainingWeight}`)) {
             const updatedGroup = deepCloneObject(group);
             const updatedPriority = findPriority(updatedGroup, priority.id);
             updatedPriority.weight = newWeight;
-            update(updatedGroup, crement);
+            update(updatedGroup, crementButton);
         }
     };
-    return crement;
+    return crementButton;
 };
 const generateOutput = (priority) => {
     const output = document.createElement('output');
@@ -116,6 +119,7 @@ const generateOutput = (priority) => {
 const generateRenameButtonAndLabel = (priority) => {
     const renameButton = document.createElement('button');
     renameButton.textContent = '✏️';
+    renameButton.setAttribute('aria-label', `Rename "${priority.name}"`);
     renameButton.classList.add('rename-button');
     renameButton.onclick = (event) => {
         const updatedGroup = deepCloneObject(group);
@@ -130,28 +134,32 @@ const generateRenameButtonAndLabel = (priority) => {
     label.htmlFor = `${priority.id}-range`;
     return [renameButton, label];
 };
-const renderPriorities = () => {
-    const prioritiesToRender = group.priorities.map((priority) => priority.isBeingEdited
-        ? renderPriorityBeingEdited(priority)
-        : renderPriority(priority));
-    priorityList.append(...prioritiesToRender);
-    const remainingWeight = document.getElementById('remaining-weight');
-    remainingWeight.textContent = `${group.remainingWeight}`;
-};
-const renderPriorityBeingEdited = (priority) => {
+const renderPriorityBeingEdited = (priority, crements) => {
     const priorityItem = document.createElement('li');
     priorityItem.id = priority.id;
-    priorityItem.append(generateDeleteButton(priority.id), generateCancelButton(priority), ...generateSaveButtonAndRenameInput(priority), generateRange(priority), generateCrement(priority, { text: '⊖', value: -1 }), generateOutput(priority), generateCrement(priority, { text: '⊕', value: 1 }));
+    priorityItem.append(generateDeleteButton(priority), generateCancelButton(priority), ...generateSaveButtonAndRenameInput(priority), generateRangeInput(priority), generateCrementButton(priority, crements.decrement), generateOutput(priority), generateCrementButton(priority, crements.increment));
     priorityItem.classList.add('being-edited');
     priorityList.classList.add('in-edit-mode');
     return priorityItem;
 };
-const renderPriority = (priority) => {
+const renderPriority = (priority, crements) => {
     const priorityItem = document.createElement('li');
     priorityItem.id = priority.id;
     priorityItem.tabIndex = -1;
-    priorityItem.append(generateDeleteButton(priority.id), ...generateRenameButtonAndLabel(priority), generateRange(priority), generateCrement(priority, { text: '⊖', value: -1 }), generateOutput(priority), generateCrement(priority, { text: '⊕', value: 1 }));
+    priorityItem.append(generateDeleteButton(priority), ...generateRenameButtonAndLabel(priority), generateRangeInput(priority), generateCrementButton(priority, crements.decrement), generateOutput(priority), generateCrementButton(priority, crements.increment));
     return priorityItem;
+};
+const renderPriorities = () => {
+    const crements = {
+        decrement: { icon: '⊖', stepAction: 'Decrement', stepValue: -1 },
+        increment: { icon: '⊕', stepAction: 'Increment', stepValue: 1 }
+    };
+    const prioritiesToRender = group.priorities.map((priority) => priority.isBeingEdited
+        ? renderPriorityBeingEdited(priority, crements)
+        : renderPriority(priority, crements));
+    priorityList.append(...prioritiesToRender);
+    const remainingWeight = document.getElementById('remaining-weight');
+    remainingWeight.textContent = `${group.remainingWeight}`;
 };
 const setMinWidth = () => {
     const labels = [...priorityList.querySelectorAll('li:not(:first-child) > label')];

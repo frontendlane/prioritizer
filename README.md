@@ -4,8 +4,9 @@ Tool that helps you get your priorities straight!
 Live at https://frontendlane.github.io/prioritizer/
 
 # Todo
-## bugs
-- add aria-label to emoji buttons
+
+# bugs
+- VoiceOver on Firefox doesn't read out contents of <output>
 
 ## ui
 - move new priority form outside ul
@@ -20,6 +21,7 @@ Live at https://frontendlane.github.io/prioritizer/
 
 ## code quality
 - format document on save
+- replace .textContent and .innerText with .append()??
 - add ESLint
     - auto format on save
         - formatting .ts should place a space between 'constructor('
