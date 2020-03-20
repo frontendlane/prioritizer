@@ -162,17 +162,17 @@ const renderPriorities = () => {
     remainingWeight.textContent = `${group.remainingWeight}`;
 };
 const setMinWidth = () => {
-    const labels = [...priorityList.querySelectorAll('li:not(:first-child) > label')];
+    const labels = [...priorityList.querySelectorAll('li > label')];
     const longestLabelLength = labels
         .map((element) => +window.getComputedStyle(element).width.split('px')[0])
         .reduce((current, next) => current > next ? current : next, 0) + 'px';
     labels.forEach((label) => label.style.minWidth = longestLabelLength);
-    const inputs = [...priorityList.querySelectorAll('li:not(:first-child) > input')];
+    const inputs = [...priorityList.querySelectorAll('li > input')];
     inputs.forEach((input) => input.style.minWidth = longestLabelLength);
 };
 export const unrender = () => {
     priorityList.classList.remove('in-edit-mode');
-    const renderedPriorities = [...priorityList.querySelectorAll('li:not(:first-child)')];
+    const renderedPriorities = [...priorityList.querySelectorAll('li')];
     renderedPriorities.forEach((priority) => priority.remove());
 };
 export const render = () => {

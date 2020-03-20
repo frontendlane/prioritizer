@@ -79,18 +79,11 @@ ul.in-edit-mode > li.being-edited:focus-within::before {
     box-shadow: 0 0 .5rem 1px black;
 }
 
-li {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-    min-height: 45px;
-}
-
-li:only-child {
+ul:empty {
     position: relative;
 }
 
-.done-fetching li:only-child::after {
+.done-fetching ul:empty::after {
     content: 'No priorities means everything\'s equally important and that never works. \A Add your first priority above'; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
     white-space: pre; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
     position: absolute;
@@ -100,16 +93,23 @@ li:only-child {
     line-height: 1.2;
 }
 
-li:not(:first-of-type):not(:last-of-type) {
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    min-height: 45px;
+}
+
+li:not(:last-of-type) {
     margin-bottom: .2rem;
 }
 
 li:nth-of-type(odd) {
-    background-color: white;
+    background-color: #eee;
 }
 
 li:nth-of-type(even) {
-    background-color: #eee;
+    background-color: white;
 }
 
 li > button {

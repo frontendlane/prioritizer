@@ -5,12 +5,6 @@ Live at https://frontendlane.github.io/prioritizer/
 
 # Todo
 
-# bugs
-- VoiceOver on Firefox doesn't read out contents of <output>
-
-## ui
-- move new priority form outside ul
-
 ## typescript
 - exclude types.ts from compilation. organize file structure
 - use typescript generics for deep clone

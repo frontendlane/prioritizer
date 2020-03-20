@@ -204,19 +204,19 @@ const renderPriorities = () => {
 };
 
 const setMinWidth = () => {
-    const labels: HTMLLabelElement[] = [...priorityList.querySelectorAll('li:not(:first-child) > label')] as HTMLLabelElement[];
+    const labels: HTMLLabelElement[] = [...priorityList.querySelectorAll('li > label')] as HTMLLabelElement[];
     const longestLabelLength: string = labels
         .map((element: HTMLLabelElement): number => +window.getComputedStyle(element).width.split('px')[0])
         .reduce((current: number, next: number) => current > next ? current : next, 0) + 'px'
     labels.forEach((label: HTMLLabelElement) => label.style.minWidth = longestLabelLength);
     
-    const inputs: HTMLInputElement[] = [...priorityList.querySelectorAll('li:not(:first-child) > input')] as HTMLInputElement[];
+    const inputs: HTMLInputElement[] = [...priorityList.querySelectorAll('li > input')] as HTMLInputElement[];
     inputs.forEach((input: HTMLInputElement) => input.style.minWidth = longestLabelLength);
 };
 
 export const unrender = () => {
     priorityList.classList.remove('in-edit-mode');
-    const renderedPriorities: HTMLLIElement[] = [...priorityList.querySelectorAll('li:not(:first-child)')] as HTMLLIElement[];
+    const renderedPriorities: HTMLLIElement[] = [...priorityList.querySelectorAll('li')] as HTMLLIElement[];
     renderedPriorities.forEach((priority: HTMLLIElement) => priority.remove());
 };
 
