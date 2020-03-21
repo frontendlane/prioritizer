@@ -6,7 +6,6 @@ Live at https://frontendlane.github.io/prioritizer/
 # Todo
 
 ## typescript
-- exclude types.ts from compilation. organize file structure
 - use typescript generics for deep clone
 
 ## styling

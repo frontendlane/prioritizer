@@ -54,7 +54,7 @@ export const update = (updatedGroup: TGroup, elementToFocus: string | HTMLElemen
     elementToFocus.focus();
 };
 
-const init = () => fetch('initial-data.json')
+const init = () => fetch('./../data/initial-data.json')
     .then(response => response.json())
     .then((data: TGroup) => {
         document.body.classList.add('done-fetching');

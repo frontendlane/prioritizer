@@ -41,7 +41,7 @@ export const update = (updatedGroup, elementToFocus = document.activeElement) =>
     elementToFocus = queryClosest(cssSelector);
     elementToFocus.focus();
 };
-const init = () => fetch('initial-data.json')
+const init = () => fetch('./../data/initial-data.json')
     .then(response => response.json())
     .then((data) => {
     document.body.classList.add('done-fetching');
