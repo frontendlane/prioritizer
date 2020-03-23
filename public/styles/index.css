@@ -83,7 +83,7 @@ ul:empty {
     position: relative;
 }
 
-.done-fetching ul:empty::after {
+.done-fetching:empty::after {
     content: 'No priorities means everything\'s equally important and that never works. \A Add your first priority above'; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
     white-space: pre; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
     position: absolute;

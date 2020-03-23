@@ -9,12 +9,12 @@ Live at https://frontendlane.github.io/prioritizer/
 - use typescript generics for deep clone
 
 ## styling
-- any alternative to using classes for dictating stylistic changes??
 - add SASS
 
 ## code quality
+- replace innerHTML and textContent with append()
+- remove &nbsp; for empty tooltip??
 - format document on save
-- replace .textContent and .innerText with .append()??
 - add ESLint
     - auto format on save
         - formatting .ts should place a space between 'constructor('

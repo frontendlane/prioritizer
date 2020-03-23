@@ -6,7 +6,7 @@ import { group, update, weightFactor } from './index.js';
 import { setTooltip } from './event-listeners.js';
 import domPath from './dom-path.js';
 
-const priorityList: HTMLUListElement = document.querySelector('ul') as HTMLUListElement;
+export const priorityList: HTMLUListElement = document.querySelector('ul') as HTMLUListElement;
 
 const deletePriorityAndSlim = (id: string, weightToSlim: number, elementToFocus: HTMLButtonElement) => {
     const smallerGroup: TGroup = deepCloneObject(group) as TGroup;
@@ -36,7 +36,6 @@ const generateDeleteButton = (priority: TPriority) => {
     const deleteButton: HTMLButtonElement = document.createElement('button');
     deleteButton.textContent = '🗑';
     deleteButton.setAttribute('aria-label', `Delete "${priority.name}"`);
-    deleteButton.classList.add('delete-button');
     deleteButton.onclick = () => {
         const requiresSlimming: boolean = group.remainingWeight + priority.weight < weightFactor;
         requiresSlimming
@@ -79,7 +78,6 @@ const generateSaveButtonAndRenameInput = (priority: TPriority): [HTMLButtonEleme
     const saveButton: HTMLButtonElement = document.createElement('button');
     saveButton.textContent = '💾';
     saveButton.setAttribute('aria-label', `Save name change for "${priority.name}"`);
-    saveButton.classList.add('save-button');
     saveButton.onclick = () => {
         const value: string = renameInput.value.trim();
 
@@ -138,7 +136,6 @@ const generateRenameButtonAndLabel = (priority: TPriority) => {
     const renameButton: HTMLButtonElement = document.createElement('button');
     renameButton.textContent = '✏️';
     renameButton.setAttribute('aria-label', `Rename "${priority.name}"`);
-    renameButton.classList.add('rename-button');
     renameButton.onclick = (event: Event) => {
         const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
         const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);

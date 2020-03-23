@@ -2,7 +2,7 @@ import { TGroup, TPriority } from './types';
 import { Group } from './Group.js';
 import domPath from './dom-path.js';
 import { attachListeners } from './event-listeners.js';
-import { unrender, render } from './rendering.js';
+import { unrender, render, priorityList } from './rendering.js';
 
 export let group: TGroup = new Group({});
 export const groupHistory: TGroup[] = [];
@@ -57,7 +57,7 @@ export const update = (updatedGroup: TGroup, elementToFocus: string | HTMLElemen
 const init = () => fetch(`${window.location.href}data/initial-data.json`)
     .then(response => response.json())
     .then((data: TGroup) => {
-        document.body.classList.add('done-fetching');
+        priorityList.classList.add('done-fetching');
         update(new Group(data));
         attachListeners();
     })
