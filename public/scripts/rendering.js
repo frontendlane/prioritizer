@@ -1,6 +1,6 @@
 import { deepCloneObject } from './deep-clone.js';
 import { isBetween } from './is-between.js';
-import { generateIdFromString, findPriority, slim } from './utils.js';
+import { generateIdFromString, findPriority, slim, setContent } from './utils.js';
 import { group, update, weightFactor } from './index.js';
 import { setNotification } from './event-listeners.js';
 import domPath from './dom-path.js';
@@ -28,7 +28,7 @@ const deletePriority = (id, elementToFocus) => {
 };
 const generateDeleteButton = (priority) => {
     const deleteButton = document.createElement('button');
-    deleteButton.textContent = '🗑';
+    setContent(deleteButton, '🗑');
     deleteButton.setAttribute('aria-label', `Delete "${priority.name}"`);
     deleteButton.onclick = () => {
         const requiresSlimming = group.remainingWeight + priority.weight < weightFactor;
@@ -46,7 +46,7 @@ const cancel = (priority, elementToFocus) => {
 };
 const generateCancelButton = (priority) => {
     const cancelButton = document.createElement('button');
-    cancelButton.textContent = '❌';
+    setContent(cancelButton, '❌');
     cancelButton.setAttribute('aria-label', `Cancel renaming "${priority.name}"`);
     cancelButton.onclick = () => cancel(priority, cancelButton);
     return cancelButton;
@@ -65,7 +65,7 @@ const generateRenameInput = (priority) => {
 const generateSaveButtonAndRenameInput = (priority) => {
     const renameInput = generateRenameInput(priority);
     const saveButton = document.createElement('button');
-    saveButton.textContent = '💾';
+    setContent(saveButton, '💾');
     saveButton.setAttribute('aria-label', `Save name change for "${priority.name}"`);
     saveButton.onclick = () => {
         const value = renameInput.value.trim();
@@ -83,9 +83,9 @@ const generateRangeInput = (priority) => {
     rangeInput.type = 'range';
     rangeInput.id = `${priority.id}-range`;
     rangeInput.name = priority.name;
-    rangeInput.value = `${priority.weight}`;
+    rangeInput.value = String(priority.weight);
     rangeInput.min = '0';
-    rangeInput.max = `${priority.weight + group.remainingWeight}`;
+    rangeInput.max = String(priority.weight + group.remainingWeight);
     rangeInput.onchange = () => {
         const updatedGroup = deepCloneObject(group);
         const updatedPriority = findPriority(updatedGroup, priority.id);
@@ -111,12 +111,12 @@ const generateCrementButton = (priority, crement) => {
 };
 const generateOutput = (priority) => {
     const output = document.createElement('output');
-    output.textContent = `${priority.weight}`;
+    setContent(output, String(priority.weight));
     return output;
 };
 const generateRenameButtonAndLabel = (priority) => {
     const renameButton = document.createElement('button');
-    renameButton.textContent = '✏️';
+    setContent(renameButton, '✏️');
     renameButton.setAttribute('aria-label', `Rename "${priority.name}"`);
     renameButton.onclick = (event) => {
         const updatedGroup = deepCloneObject(group);
@@ -127,7 +127,7 @@ const generateRenameButtonAndLabel = (priority) => {
         update(updatedGroup, elementToFocus);
     };
     const label = document.createElement('label');
-    label.textContent = priority.name;
+    setContent(label, priority.name);
     label.htmlFor = `${priority.id}-range`;
     return [renameButton, label];
 };
@@ -156,7 +156,7 @@ const renderPriorities = () => {
         : renderPriority(priority, crements));
     priorityList.append(...prioritiesToRender);
     const remainingWeight = document.getElementById('remaining-weight');
-    remainingWeight.textContent = `${group.remainingWeight}`;
+    setContent(remainingWeight, String(group.remainingWeight));
 };
 const setMinWidth = () => {
     const labels = [...priorityList.querySelectorAll('li > label')];

@@ -1,7 +1,7 @@
 import { HTMLInputRangeElement, TPriority, TGroup, TCrements, TCrement } from './types';
 import { deepCloneObject } from './deep-clone.js';
 import { isBetween } from './is-between.js';
-import { generateIdFromString, findPriority, slim } from './utils.js';
+import { generateIdFromString, findPriority, slim, setContent } from './utils.js';
 import { group, update, weightFactor } from './index.js';
 import { setNotification } from './event-listeners.js';
 import domPath from './dom-path.js';
@@ -34,7 +34,7 @@ const deletePriority = (id: string, elementToFocus: HTMLButtonElement) => {
 
 const generateDeleteButton = (priority: TPriority) => {
     const deleteButton: HTMLButtonElement = document.createElement('button');
-    deleteButton.textContent = '🗑';
+    setContent(deleteButton, '🗑');
     deleteButton.setAttribute('aria-label', `Delete "${priority.name}"`);
     deleteButton.onclick = () => {
         const requiresSlimming: boolean = group.remainingWeight + priority.weight < weightFactor;
@@ -54,7 +54,7 @@ const cancel = (priority: TPriority, elementToFocus: HTMLElement) => {
 
 const generateCancelButton = (priority: TPriority): HTMLButtonElement => {
     const cancelButton: HTMLButtonElement = document.createElement('button');
-    cancelButton.textContent = '❌';
+    setContent(cancelButton, '❌');
     cancelButton.setAttribute('aria-label', `Cancel renaming "${priority.name}"`);
     cancelButton.onclick = () => cancel(priority, cancelButton);
     return cancelButton;
@@ -76,7 +76,7 @@ const generateSaveButtonAndRenameInput = (priority: TPriority): [HTMLButtonEleme
     const renameInput: HTMLInputElement = generateRenameInput(priority);
 
     const saveButton: HTMLButtonElement = document.createElement('button');
-    saveButton.textContent = '💾';
+    setContent(saveButton, '💾');
     saveButton.setAttribute('aria-label', `Save name change for "${priority.name}"`);
     saveButton.onclick = () => {
         const value: string = renameInput.value.trim();
@@ -97,9 +97,9 @@ const generateRangeInput = (priority: TPriority): HTMLInputRangeElement => {
     rangeInput.type = 'range';
     rangeInput.id = `${priority.id}-range`;
     rangeInput.name = priority.name;
-    rangeInput.value = `${priority.weight}`;
+    rangeInput.value = String(priority.weight);
     rangeInput.min = '0';
-    rangeInput.max = `${priority.weight + group.remainingWeight}`;
+    rangeInput.max = String(priority.weight + group.remainingWeight);
     rangeInput.onchange = () => {
         const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
         const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
@@ -128,13 +128,13 @@ const generateCrementButton = (priority: TPriority, crement: TCrement): HTMLButt
 
 const generateOutput = (priority: TPriority): HTMLOutputElement => {
     const output: HTMLOutputElement = document.createElement('output');
-    output.textContent = `${priority.weight}`;
+    setContent(output, String(priority.weight));
     return output;
 };
 
 const generateRenameButtonAndLabel = (priority: TPriority) => {
     const renameButton: HTMLButtonElement = document.createElement('button');
-    renameButton.textContent = '✏️';
+    setContent(renameButton, '✏️');
     renameButton.setAttribute('aria-label', `Rename "${priority.name}"`);
     renameButton.onclick = (event: Event) => {
         const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
@@ -146,7 +146,7 @@ const generateRenameButtonAndLabel = (priority: TPriority) => {
     };
 
     const label: HTMLLabelElement = document.createElement('label');
-    label.textContent = priority.name;
+    setContent(label, priority.name);
     label.htmlFor = `${priority.id}-range`;
 
     return [renameButton, label];
@@ -197,7 +197,7 @@ const renderPriorities = () => {
 
     priorityList.append(...prioritiesToRender);
     const remainingWeight: HTMLOutputElement = document.getElementById('remaining-weight') as HTMLOutputElement;
-    remainingWeight.textContent = `${group.remainingWeight}`;
+    setContent(remainingWeight, String(group.remainingWeight));
 };
 
 const setMinWidth = () => {

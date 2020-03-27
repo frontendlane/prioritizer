@@ -13,14 +13,14 @@ const moveCaretTo = (selection: Selection, h1: HTMLHeadingElement, index: number
 };
 
 const updateProjectName = (event: Event) => {
-    const selection: Selection = document.getSelection() as Selection;
+    const selection = document.getSelection() as Selection;
     const caretIndex: number = selection.focusOffset;
-    const h1: HTMLHeadingElement = event.target as HTMLHeadingElement;
-    const projectName: string = h1.textContent as string;
+    const h1 = event.target as HTMLHeadingElement;
+    const projectName = h1.textContent || '';
     document.title = `${projectName} priorities`;
 
     setTimeout(() => {
-        h1.innerHTML = projectName;
+        setContent(h1, projectName);
         moveCaretTo(selection, h1, caretIndex);
     }, 0);
 };

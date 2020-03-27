@@ -12,10 +12,10 @@ const updateProjectName = (event) => {
     const selection = document.getSelection();
     const caretIndex = selection.focusOffset;
     const h1 = event.target;
-    const projectName = h1.textContent;
+    const projectName = h1.textContent || '';
     document.title = `${projectName} priorities`;
     setTimeout(() => {
-        h1.innerHTML = projectName;
+        setContent(h1, projectName);
         moveCaretTo(selection, h1, caretIndex);
     }, 0);
 };
