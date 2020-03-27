@@ -33,13 +33,13 @@ const add = ({id, name}: {id: string, name: string}, elementToFocus: HTMLButtonE
     form.reset();
 };
 
-const getTooltip = () => document.querySelector('[aria-live="polite"][role="status"]') as HTMLParagraphElement;
-const clearTooltip = (tooltip = getTooltip()) => removeContent(tooltip);
+const getNotificationBar = () => document.querySelector('[aria-live="polite"][role="status"]') as HTMLParagraphElement;
+const clearNotification = (notificationBar = getNotificationBar()) => removeContent(notificationBar);
 
-export const setTooltip = (text: string) => {
-    const tooltip = getTooltip();
-    clearTooltip(tooltip);
-    setTimeout(() => setContent(tooltip, text), 100);
+export const setNotification = (text: string) => {
+    const notificationBar = getNotificationBar();
+    clearNotification(notificationBar);
+    setTimeout(() => setContent(notificationBar, text), 100);
 };
 
 const submitNew = (event: Event) => {
@@ -50,7 +50,7 @@ const submitNew = (event: Event) => {
     const id: string = `fel-prioritizer-${generateIdFromString(name)}`;
     const doesAlreadyExist = group.priorities.some((priority: TPriority) => id === priority.id);
     doesAlreadyExist
-        ? setTooltip(`There's already a priority with that name`)
+        ? setNotification(`There's already a priority with that name`)
         : add({ id, name}, submitEvent.explicitOriginalTarget, submitEvent.target as HTMLFormElement);
 };
 
@@ -67,7 +67,7 @@ const undo = () => {
 };
 
 export const attachListeners = () => {
-    document.addEventListener('click', () => clearTooltip());
+    document.addEventListener('click', () => clearNotification());
     document.querySelector('h1')?.addEventListener('input', updateProjectName);
     document.querySelector('form')?.addEventListener('submit', submitNew);
     document.getElementById('undo')?.addEventListener('click', undo);

@@ -16,7 +16,6 @@ Live at https://frontendlane.github.io/prioritizer/
 - add SASS
 
 ## code quality
-- rename tooltip to notification bar??
 - replace innerHTML and textContent with append()
 - remove duplicate type on 'as', use optional chaining instead
 - remove references to `window`
