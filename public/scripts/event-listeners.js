@@ -1,6 +1,6 @@
 import { Priority } from './Priority.js';
 import { deepCloneObject } from './deep-clone.js';
-import { generateIdFromString } from './utils.js';
+import { generateIdFromString, removeContent, setContent } from './utils.js';
 import { group, groupHistory, update, rinseDOM } from './index.js';
 const moveCaretTo = (selection, h1, index) => {
     const range = document.createRange();
@@ -27,11 +27,11 @@ const add = ({ id, name }, elementToFocus, form) => {
     form.reset();
 };
 const getTooltip = () => document.querySelector('[aria-live="polite"][role="status"]');
-const clearTooltip = (tooltip = getTooltip()) => tooltip.innerHTML = '&nbsp;';
+const clearTooltip = (tooltip = getTooltip()) => removeContent(tooltip);
 export const setTooltip = (text) => {
-    const tooltipElement = getTooltip();
-    clearTooltip(tooltipElement);
-    setTimeout(() => tooltipElement.textContent = text, 50);
+    const tooltip = getTooltip();
+    clearTooltip(tooltip);
+    setTimeout(() => setContent(tooltip, text), 100);
 };
 const submitNew = (event) => {
     const submitEvent = event;
@@ -41,7 +41,7 @@ const submitNew = (event) => {
     const id = `fel-prioritizer-${generateIdFromString(name)}`;
     const doesAlreadyExist = group.priorities.some((priority) => id === priority.id);
     doesAlreadyExist
-        ? setTooltip('There\'s already a priority with that name')
+        ? setTooltip(`There's already a priority with that name`)
         : add({ id, name }, submitEvent.explicitOriginalTarget, submitEvent.target);
 };
 const sort = (event) => {
@@ -57,7 +57,6 @@ const undo = () => {
 export const attachListeners = () => {
     var _a, _b, _c, _d;
     document.addEventListener('click', () => clearTooltip());
-    document.addEventListener('focus', () => clearTooltip(), true);
     (_a = document.querySelector('h1')) === null || _a === void 0 ? void 0 : _a.addEventListener('input', updateProjectName);
     (_b = document.querySelector('form')) === null || _b === void 0 ? void 0 : _b.addEventListener('submit', submitNew);
     (_c = document.getElementById('undo')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', undo);

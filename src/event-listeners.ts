@@ -1,7 +1,7 @@
 import { TGroup, TPriority, SubmitEvent } from './types';
 import { Priority } from './Priority.js';
 import { deepCloneObject } from './deep-clone.js';
-import { generateIdFromString } from './utils.js';
+import { generateIdFromString, removeContent, setContent } from './utils.js';
 import { group, groupHistory, update, rinseDOM } from './index.js';
 
 const moveCaretTo = (selection: Selection, h1: HTMLHeadingElement, index: number) => {
@@ -33,13 +33,13 @@ const add = ({id, name}: {id: string, name: string}, elementToFocus: HTMLButtonE
     form.reset();
 };
 
-const getTooltip = (): HTMLParagraphElement => document.querySelector('[aria-live="polite"][role="status"]') as HTMLParagraphElement;
-const clearTooltip = (tooltip: HTMLParagraphElement = getTooltip()) => tooltip.innerHTML = '&nbsp;';
+const getTooltip = () => document.querySelector('[aria-live="polite"][role="status"]') as HTMLParagraphElement;
+const clearTooltip = (tooltip = getTooltip()) => removeContent(tooltip);
 
 export const setTooltip = (text: string) => {
-    const tooltipElement: HTMLParagraphElement = getTooltip();
-    clearTooltip(tooltipElement);
-    setTimeout(() => tooltipElement.textContent = text, 50);
+    const tooltip = getTooltip();
+    clearTooltip(tooltip);
+    setTimeout(() => setContent(tooltip, text), 100);
 };
 
 const submitNew = (event: Event) => {
@@ -50,7 +50,7 @@ const submitNew = (event: Event) => {
     const id: string = `fel-prioritizer-${generateIdFromString(name)}`;
     const doesAlreadyExist = group.priorities.some((priority: TPriority) => id === priority.id);
     doesAlreadyExist
-        ? setTooltip('There\'s already a priority with that name')
+        ? setTooltip(`There's already a priority with that name`)
         : add({ id, name}, submitEvent.explicitOriginalTarget, submitEvent.target as HTMLFormElement);
 };
 
@@ -68,7 +68,6 @@ const undo = () => {
 
 export const attachListeners = () => {
     document.addEventListener('click', () => clearTooltip());
-    document.addEventListener('focus', () => clearTooltip(), true);
     document.querySelector('h1')?.addEventListener('input', updateProjectName);
     document.querySelector('form')?.addEventListener('submit', submitNew);
     document.getElementById('undo')?.addEventListener('click', undo);

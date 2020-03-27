@@ -5,15 +5,21 @@ Live at https://frontendlane.github.io/prioritizer/
 
 # Todo
 
+## bugs
+- remove invalid characters from CSS classes: https://stackoverflow.com/questions/448981
+
 ## typescript
-- use typescript generics for deep clone
+- use typescript generics for deep clone: https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkt
+- remove extraneous explicit types when implicit types would work
 
 ## styling
 - add SASS
 
 ## code quality
+- rename tooltip to notification bar??
 - replace innerHTML and textContent with append()
-- remove &nbsp; for empty tooltip??
+- remove duplicate type on 'as', use optional chaining instead
+- remove references to `window`
 - format document on save
 - add ESLint
     - auto format on save

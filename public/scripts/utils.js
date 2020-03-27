@@ -1,4 +1,13 @@
 export const generateIdFromString = (string) => string.toLowerCase().replace(/ /g, '-');
+export const removeContent = (element) => {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+};
+export const setContent = (element, content) => {
+    removeContent(element);
+    element.append(content);
+};
 export const findPriority = (group, id) => group.priorities.find((priority) => priority.id === id);
 const getPrioritiesSafeForSlimming = (priorities) => priorities.filter((priority, index) => !priorities[index + 1] || (priority.weight - priorities[index + 1].weight > 1));
 const getRiskyPrioritiesForSlimming = (priorities) => priorities.filter((priority, index) => !priorities[index + 1] || (priority.weight - priorities[index + 1].weight === 1));

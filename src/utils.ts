@@ -2,6 +2,17 @@ import { TPriority, TGroup, TPrioritySlimRatio } from './types';
 
 export const generateIdFromString = (string: string) => string.toLowerCase().replace(/ /g, '-');
 
+export const removeContent = (element: HTMLElement) => {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+};
+
+export const setContent = (element: HTMLElement, content: string) => {
+    removeContent(element);
+    element.append(content);
+};
+
 export const findPriority = (group: TGroup, id: string): TPriority =>
     group.priorities.find((priority: TPriority) => priority.id === id) as TPriority;
 

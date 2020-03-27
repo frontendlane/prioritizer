@@ -37,6 +37,10 @@ h1 {
     word-break: break-all;
 }
 
+[aria-live="polite"][role="status"]:empty::before {
+    content: '\a0';
+}
+
 div {
     text-align: right;
 }
@@ -79,7 +83,7 @@ ul.in-edit-mode > li.being-edited:focus-within::before {
     box-shadow: 0 0 .5rem 1px black;
 }
 
-ul:empty {
+.done-fetching:empty {
     position: relative;
 }
 
