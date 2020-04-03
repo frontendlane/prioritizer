@@ -161,7 +161,7 @@ const renderPriorities = () => {
 const setMinWidth = () => {
     const labels = [...priorityList.querySelectorAll('li > label')];
     const longestLabelLength = labels
-        .map((element) => +window.getComputedStyle(element).width.split('px')[0])
+        .map((element) => +getComputedStyle(element).width.split('px')[0])
         .reduce((current, next) => current > next ? current : next, 0) + 'px';
     labels.forEach((label) => label.style.minWidth = longestLabelLength);
     const inputs = [...priorityList.querySelectorAll('li > input')];

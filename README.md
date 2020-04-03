@@ -17,7 +17,6 @@ Live at https://frontendlane.github.io/prioritizer/
 
 ## code quality
 - remove duplicate type on 'as', use optional chaining instead
-- remove references to `window`
 - format document on save
 - add ESLint
     - auto format on save

@@ -203,7 +203,7 @@ const renderPriorities = () => {
 const setMinWidth = () => {
     const labels: HTMLLabelElement[] = [...priorityList.querySelectorAll('li > label')] as HTMLLabelElement[];
     const longestLabelLength: string = labels
-        .map((element: HTMLLabelElement): number => +window.getComputedStyle(element).width.split('px')[0])
+        .map((element: HTMLLabelElement): number => +getComputedStyle(element).width.split('px')[0])
         .reduce((current: number, next: number) => current > next ? current : next, 0) + 'px'
     labels.forEach((label: HTMLLabelElement) => label.style.minWidth = longestLabelLength);
     
