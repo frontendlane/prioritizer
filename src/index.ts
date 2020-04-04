@@ -1,6 +1,6 @@
 import { TGroup, TPriority } from './types';
 import { Group } from './Group.js';
-import domPath from './dom-path.js';
+import { cssPath, queryClosest } from './css-path.js';
 import { attachListeners } from './event-listeners.js';
 import { unrender, render, priorityList } from './rendering.js';
 
@@ -18,8 +18,6 @@ const calcRemainingWeight = (group: TGroup): number => {
     return totalMaxWeight - usedWeight;
 };
 
-const addToHistory = (group: TGroup) => groupHistory.push(group);
-
 export const rinseDOM = (updatedGroup: TGroup) => {
     group = updatedGroup;
     group.remainingWeight = calcRemainingWeight(updatedGroup);
@@ -27,27 +25,12 @@ export const rinseDOM = (updatedGroup: TGroup) => {
     render();
 };
 
-const getParentCssSelector = (cssSelector: string): string => {
-    const cssSelectorParts: string[] = cssSelector.split('>')
-    const parentCssSelector: string = cssSelectorParts.splice(0, cssSelectorParts.length - 1).join('>');
-    return parentCssSelector || 'body';
-};
-
-const queryClosest = (cssSelector: string): HTMLElement => {
-    let closest = document.querySelector(cssSelector);
-    while (!closest) {
-        closest = document.querySelector(cssSelector);
-        cssSelector = getParentCssSelector(cssSelector);
-    }
-    return closest as HTMLElement;
-};
-
 export const update = (updatedGroup: TGroup, elementToFocus: string | HTMLElement = document.activeElement as HTMLElement) => {
     const cssSelector: string = typeof elementToFocus === 'string'
         ? elementToFocus
-        : domPath(elementToFocus).toCSS();
+        : cssPath(elementToFocus);
 
-    addToHistory(group);
+    groupHistory.push(group);
     rinseDOM(updatedGroup);
 
     elementToFocus = queryClosest(cssSelector);

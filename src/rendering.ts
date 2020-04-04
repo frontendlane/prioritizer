@@ -4,7 +4,7 @@ import { isBetween } from './is-between.js';
 import { generateIdFromString, findPriority, slim, setContent } from './utils.js';
 import { group, update, weightFactor } from './index.js';
 import { setNotification } from './event-listeners.js';
-import domPath from './dom-path.js';
+import { cssPath } from './css-path.js';
 
 export const priorityList: HTMLUListElement = document.querySelector('ul') as HTMLUListElement;
 
@@ -141,7 +141,7 @@ const generateRenameButtonAndLabel = (priority: TPriority) => {
         const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
         updatedPriority.isBeingEdited = true;
         const container: HTMLLIElement = (event.target as HTMLButtonElement).closest('li') as HTMLLIElement;
-        const elementToFocus: string = domPath(container).toCSS() + ' > input[type="text"]';
+        const elementToFocus: string = `${cssPath(container)} > input[type="text"]`;
         update(updatedGroup, elementToFocus);
     };
 

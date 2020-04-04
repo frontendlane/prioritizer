@@ -3,7 +3,7 @@ import { isBetween } from './is-between.js';
 import { generateIdFromString, findPriority, slim, setContent } from './utils.js';
 import { group, update, weightFactor } from './index.js';
 import { setNotification } from './event-listeners.js';
-import domPath from './dom-path.js';
+import { cssPath } from './css-path.js';
 export const priorityList = document.querySelector('ul');
 const deletePriorityAndSlim = (id, weightToSlim, elementToFocus) => {
     const smallerGroup = deepCloneObject(group);
@@ -123,7 +123,7 @@ const generateRenameButtonAndLabel = (priority) => {
         const updatedPriority = findPriority(updatedGroup, priority.id);
         updatedPriority.isBeingEdited = true;
         const container = event.target.closest('li');
-        const elementToFocus = domPath(container).toCSS() + ' > input[type="text"]';
+        const elementToFocus = `${cssPath(container)} > input[type="text"]`;
         update(updatedGroup, elementToFocus);
     };
     const label = document.createElement('label');

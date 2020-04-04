@@ -4,7 +4,8 @@
   "description": "Tool that helps you get your priorities straight!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "rm -r ./public/scripts/*.js && npx tsc"
   },
   "repository": {
     "type": "git",

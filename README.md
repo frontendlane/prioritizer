@@ -11,6 +11,7 @@ Live at https://frontendlane.github.io/prioritizer/
 ## typescript
 - use typescript generics for deep clone: https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkt
 - remove extraneous explicit types when implicit types would work
+- maybe HTMLElement should be replaced with Element because of svg elements??
 
 ## styling
 - add SASS
@@ -51,8 +52,5 @@ Live at https://frontendlane.github.io/prioritizer/
     Security
     Developer comfort
     - some more categories: https://frontendchecklist.io/#section-accessibility
-- create my own css selector generating library that doesn't use id or classes but rather only child selectors
-    - the library should always include element name in the selector. that solves the issue of clicking rename button and having save button get focused
-    - that way i get rid of `|| 'body'`
 - once you rank projects, then order them in the chronological order from most urgent to least urgent
 - better fetch error handling
