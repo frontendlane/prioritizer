@@ -123,7 +123,7 @@ const generateRenameButtonAndLabel = (priority) => {
         const updatedPriority = findPriority(updatedGroup, priority.id);
         updatedPriority.isBeingEdited = true;
         const container = event.target.closest('li');
-        const elementToFocus = `${cssPath(container)} > input[type="text"]`;
+        const elementToFocus = container ? `${cssPath(container)} > input[type="text"]` : '';
         update(updatedGroup, elementToFocus);
     };
     const label = document.createElement('label');

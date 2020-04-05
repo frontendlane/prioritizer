@@ -140,8 +140,8 @@ const generateRenameButtonAndLabel = (priority: TPriority) => {
         const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
         const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
         updatedPriority.isBeingEdited = true;
-        const container: HTMLLIElement = (event.target as HTMLButtonElement).closest('li') as HTMLLIElement;
-        const elementToFocus: string = `${cssPath(container)} > input[type="text"]`;
+        const container: HTMLLIElement | null = (event.target as HTMLButtonElement).closest('li');
+        const elementToFocus: string = container ? `${cssPath(container)} > input[type="text"]` : '';
         update(updatedGroup, elementToFocus);
     };
 

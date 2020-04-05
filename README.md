@@ -10,8 +10,7 @@ Live at https://frontendlane.github.io/prioritizer/
 
 ## typescript
 - use typescript generics for deep clone: https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkt
-- remove extraneous explicit types when implicit types would work
-- maybe HTMLElement should be replaced with Element because of svg elements??
+- how will `.focus()` work on `<svg>` or `<iframe>` elements?? replace HTMLElement with Element??
 
 ## styling
 - add SASS
