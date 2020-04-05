@@ -5,9 +5,6 @@ Live at https://frontendlane.github.io/prioritizer/
 
 # Todo
 
-## bugs
-- remove invalid characters from CSS classes: https://stackoverflow.com/questions/448981
-
 ## typescript
 - use typescript generics for deep clone: https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkt
 - how will `.focus()` work on `<svg>` or `<iframe>` elements?? replace HTMLElement with Element??
