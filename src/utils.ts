@@ -24,7 +24,7 @@ const getRiskyPrioritiesForSlimming = (priorities: TPriority[]): TPriority[] =>
     priorities.filter((priority: TPriority, index: number) =>
         !priorities[index + 1] || (priority.weight - priorities[index + 1].weight === 1));
 
-export const slim = (groupForUpdate: TGroup, smallerGroup: TGroup): TGroup => {
+export const slim = (groupForUpdate: TGroup, groupWithoutDeletedPriority: TGroup): TGroup => {
     const prioritiesByWeight: TPriority[] = [...groupForUpdate.priorities]
         .sort((current: TPriority, next: TPriority) => current.weight > next.weight ? -1 : 1);
 
@@ -42,7 +42,7 @@ export const slim = (groupForUpdate: TGroup, smallerGroup: TGroup): TGroup => {
 
     const prioritiesWithSlimmingPriority: TPrioritySlimRatio[] = eligibleForSlimming.map((priority: TPriority) => ({
         ...priority,
-        slimRatio: (findPriority(groupForUpdate, priority.id).weight - 1) / findPriority(smallerGroup, priority.id).weight
+        slimRatio: (findPriority(groupForUpdate, priority.id).weight - 1) / findPriority(groupWithoutDeletedPriority, priority.id).weight
     }));
     const sortedPrioritiesWithSlimmingPriority: TPrioritySlimRatio[] = prioritiesWithSlimmingPriority
         .sort((current: TPrioritySlimRatio, next: TPrioritySlimRatio) => current.slimRatio > next.slimRatio ? -1 : 1);

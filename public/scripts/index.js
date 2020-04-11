@@ -1,5 +1,7 @@
 import { Group } from './Group.js';
-import { cssPath, queryClosest } from './css-path.js';
+import { normalizeFocus, focus } from './focus-normalizer.js';
+import { cssPath } from './css-path.js';
+import { getMostRecentFocusableElement } from './focus-history.js';
 import { attachListeners } from './event-listeners.js';
 import { unrender, render, priorityList } from './rendering.js';
 export let group = new Group({});
@@ -18,21 +20,37 @@ export const rinseDOM = (updatedGroup) => {
     unrender();
     render();
 };
-export const update = (updatedGroup, elementToFocus = document.activeElement) => {
-    const cssSelector = typeof elementToFocus === 'string'
-        ? elementToFocus
-        : cssPath(elementToFocus);
+const update = (updatedGroup) => {
     groupHistory.push(group);
     rinseDOM(updatedGroup);
-    elementToFocus = queryClosest(cssSelector);
-    elementToFocus.focus();
+};
+export const updateAndPreserveFocus = (updatedGroup) => {
+    const cssSelector = cssPath(document.activeElement);
+    update(updatedGroup);
+    if (cssSelector) {
+        const elementToFocus = document.querySelector(cssSelector);
+        focus(elementToFocus);
+    }
+};
+export const updateAndDirectFocus = (updatedGroup, secondParameter) => {
+    update(updatedGroup);
+    if (secondParameter) {
+        const elementToFocus = document.querySelector(secondParameter);
+        focus(elementToFocus);
+    }
+};
+export const updateAndRewindFocus = (updatedGroup) => {
+    update(updatedGroup);
+    const elementToFocus = getMostRecentFocusableElement();
+    focus(elementToFocus);
 };
 const init = () => fetch(`${location.href}data/initial-data.json`)
     .then(response => response.json())
     .then((data) => {
     priorityList.classList.add('done-fetching');
-    update(new Group(data));
+    updateAndPreserveFocus(new Group(data));
     attachListeners();
 })
     .catch(console.error);
+normalizeFocus();
 init();

@@ -1,7 +1,9 @@
 import { Priority } from './Priority.js';
 import { deepCloneObject } from './deep-clone.js';
 import { generateIdFromString, removeContent, setContent } from './utils.js';
-import { group, groupHistory, update, rinseDOM } from './index.js';
+import { group, groupHistory, rinseDOM, updateAndPreserveFocus } from './index.js';
+const getNotificationBar = () => document.querySelector('[aria-live="polite"][role="status"]');
+const clearNotification = (notificationBar = getNotificationBar()) => removeContent(notificationBar);
 const moveCaretTo = (selection, h1, index) => {
     const range = document.createRange();
     range.setStart(h1.firstChild || h1, index);
@@ -19,40 +21,37 @@ const updateProjectName = (event) => {
         moveCaretTo(selection, h1, caretIndex);
     }, 0);
 };
-const add = ({ id, name }, elementToFocus, form) => {
-    const updatedGroup = deepCloneObject(group);
-    const newPriority = new Priority({ id, name });
-    updatedGroup.priorities.unshift(newPriority);
-    update(updatedGroup, elementToFocus);
-    form.reset();
-};
-const getNotificationBar = () => document.querySelector('[aria-live="polite"][role="status"]');
-const clearNotification = (notificationBar = getNotificationBar()) => removeContent(notificationBar);
 export const setNotification = (text) => {
     const notificationBar = getNotificationBar();
     clearNotification(notificationBar);
     setTimeout(() => setContent(notificationBar, text), 100);
 };
+const add = ({ id, name }, form) => {
+    const updatedGroup = deepCloneObject(group);
+    const newPriority = new Priority({ id, name });
+    updatedGroup.priorities.unshift(newPriority);
+    form.reset();
+    updateAndPreserveFocus(updatedGroup);
+};
 const submitNew = (event) => {
-    const submitEvent = event;
-    submitEvent.preventDefault();
+    event.preventDefault();
     const input = document.getElementById('new-priority');
     const name = input.value.trim();
     const id = `${generateIdFromString(name)}`;
     const doesAlreadyExist = group.priorities.some((priority) => id === priority.id);
     doesAlreadyExist
         ? setNotification(`There's already a priority with that name`)
-        : add({ id, name }, submitEvent.explicitOriginalTarget, submitEvent.target);
-};
-const sort = (event) => {
-    const updatedGroup = deepCloneObject(group);
-    updatedGroup.priorities.sort((current, next) => current.weight > next.weight ? -1 : 1);
-    update(updatedGroup, event.target);
+        : add({ id, name }, event.target);
 };
 const undo = () => {
     if (groupHistory.length > 1) {
         rinseDOM(groupHistory.pop());
     }
+};
+const sort = () => {
+    const updatedGroup = deepCloneObject(group);
+    updatedGroup.priorities.sort((current, next) => current.weight > next.weight ? -1 : 1);
+    updateAndPreserveFocus(updatedGroup);
 };
 export const attachListeners = () => {
     var _a, _b, _c, _d;

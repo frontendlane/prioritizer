@@ -5,9 +5,17 @@ Live at https://frontendlane.github.io/prioritizer/
 
 # Todo
 
+## bugs
+- crementing after changing priority name and not having saved the change causes the new name to disappear 
+- focus should only be seen when navigating via keyboard: `:focus-visible`, `:-moz-focusring`
+- pressing ENTER on rename input should save
+    - put a <form> inside each <li>
+- new name must be required to save
+- undo should revert project name change
+- set an upper limit to the max-width on labels
+
 ## typescript
 - use typescript generics for deep clone: https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkt
-- how will `.focus()` work on `<svg>` or `<iframe>` elements?? replace HTMLElement with Element??
 
 ## styling
 - add SASS
@@ -20,9 +28,11 @@ Live at https://frontendlane.github.io/prioritizer/
         - formatting .ts should place a space between 'constructor('
     - no unused exports
 - optimize tsconfig.json
+    - minify js, remove comments
 - add tool that increments package.json version on each commit or create a git commit hook that checks if it was changed
 
 ## features
+- input for adding new priority should be transform: scale(1.2); when :focus
 - disable crement buttons if they can't complete
 - higher priority has greater font size for print
 - 2 seconds after last change, check if sort order would be different and if so offer to re-order
@@ -35,6 +45,10 @@ Live at https://frontendlane.github.io/prioritizer/
 - ability to store and view priorities for multiple projects, optionally simultaneously
 - slider size should indicate how much weight a priority has, or should it be indicated by some (colored) bars next to each priority??
 - generate priority weight graph for print
+- print preview button??
+- export to .txt file
+- export to .csv file
+- command palete: extract into a separate library
 
 ## backlog
 - make it shareable. shorten url project
@@ -48,5 +62,8 @@ Live at https://frontendlane.github.io/prioritizer/
     Security
     Developer comfort
     - some more categories: https://frontendchecklist.io/#section-accessibility
+    - if categories, allow for drag n drop ordering
 - once you rank projects, then order them in the chronological order from most urgent to least urgent
 - better fetch error handling
+- it need not only be priorities, it can be tasks as well. up to the user
+- create my own baseline.css

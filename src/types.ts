@@ -2,9 +2,11 @@ export interface HTMLInputRangeElement extends HTMLInputElement {
     valueAsNumber: number;
 }
 
-export interface SubmitEvent extends Event {
+export interface ClickEvent extends MouseEvent {
     explicitOriginalTarget: HTMLButtonElement | HTMLInputElement;
 }
+
+export type FocusableHTMLElement = HTMLButtonElement | HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
 export type TPriority = {
     id: string,

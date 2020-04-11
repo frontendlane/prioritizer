@@ -2,34 +2,36 @@ import { HTMLInputRangeElement, TPriority, TGroup, TCrements, TCrement } from '.
 import { deepCloneObject } from './deep-clone.js';
 import { isBetween } from './is-between.js';
 import { generateIdFromString, findPriority, slim, setContent } from './utils.js';
-import { group, update, weightFactor } from './index.js';
+import { group, weightFactor, updateAndPreserveFocus, updateAndRewindFocus, updateAndDirectFocus } from './index.js';
 import { setNotification } from './event-listeners.js';
 import { cssPath } from './css-path.js';
 
 export const priorityList: HTMLUListElement = document.querySelector('ul') as HTMLUListElement;
 
-const deletePriorityAndSlim = (id: string, weightToSlim: number, elementToFocus: HTMLButtonElement) => {
-    const smallerGroup: TGroup = deepCloneObject(group) as TGroup;
-    smallerGroup.priorities = smallerGroup.priorities.filter((priority: TPriority) => priority.id !== id);
-    let groupForUpdate: TGroup = deepCloneObject(smallerGroup) as TGroup;
+const deletePriorityAndSlim = (id: string, weightToSlim: number) => {
+    const groupWithoutDeletedPriority: TGroup = deepCloneObject(group) as TGroup;
+    groupWithoutDeletedPriority.priorities = groupWithoutDeletedPriority.priorities.filter((priority: TPriority) => priority.id !== id);
+    let groupForUpdate: TGroup = deepCloneObject(groupWithoutDeletedPriority) as TGroup;
     for (let i: number = 0; i < weightToSlim; i++) {
-        groupForUpdate = slim(groupForUpdate, smallerGroup);
+        groupForUpdate = slim(groupForUpdate, groupWithoutDeletedPriority);
     }
-    update(groupForUpdate, elementToFocus);
+
+    updateAndRewindFocus(groupForUpdate);
 };
 
-const confirmSlimming = (priority: TPriority, elementToFocus: HTMLButtonElement) => {
+const confirmSlimming = (priority: TPriority) => {
     const weightToSlim: number = weightFactor - group.remainingWeight - priority.weight;
     const shouldAutoSlim: boolean = confirm(`"${priority.name}"'s weight is being used on other priorities. To ensure priorities maintain their relative importance you should free up ${weightToSlim} weight from other priorities. Prioritizer can automaticaly remove this weight but this may change relative importance of your priorities. Do you want Prioritizer to automatically free up weight?`);
     shouldAutoSlim
-        ? deletePriorityAndSlim(priority.id, weightToSlim, elementToFocus)
+        ? deletePriorityAndSlim(priority.id, weightToSlim)
         : setNotification(`You need to free up ${weightToSlim} weights in order to delete "${priority.name}" without Prioritizer (incorectly) automatically freeing up weights for you.`);
 };
 
-const deletePriority = (id: string, elementToFocus: HTMLButtonElement) => {
+const deletePriority = (id: string) => {
     const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
     updatedGroup.priorities = updatedGroup.priorities.filter((priority: TPriority) => priority.id !== id);        
-    update(updatedGroup, elementToFocus);
+
+    updateAndRewindFocus(updatedGroup);
 };
 
 const generateDeleteButton = (priority: TPriority) => {
@@ -39,24 +41,25 @@ const generateDeleteButton = (priority: TPriority) => {
     deleteButton.onclick = () => {
         const requiresSlimming: boolean = group.remainingWeight + priority.weight < weightFactor;
         requiresSlimming
-            ? confirmSlimming(priority, deleteButton)
-            : deletePriority(priority.id, deleteButton);
+            ? confirmSlimming(priority)
+            : deletePriority(priority.id);
     };
     return deleteButton;
 };
 
-const cancel = (priority: TPriority, elementToFocus: HTMLElement) => {
+const cancel = (priority: TPriority) => {
     const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
     const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
     updatedPriority.isBeingEdited = false;
-    update(updatedGroup, elementToFocus);
+
+    updateAndRewindFocus(updatedGroup);
 };
 
 const generateCancelButton = (priority: TPriority): HTMLButtonElement => {
     const cancelButton: HTMLButtonElement = document.createElement('button');
     setContent(cancelButton, '❌');
     cancelButton.setAttribute('aria-label', `Cancel renaming "${priority.name}"`);
-    cancelButton.onclick = () => cancel(priority, cancelButton);
+    cancelButton.onclick = () => cancel(priority);
     return cancelButton;
 };
 
@@ -66,7 +69,9 @@ const generateRenameInput = (priority: TPriority): HTMLInputElement => {
     renameInput.value = priority.name;
     renameInput.onkeyup = event => {
         if (event.code === 'Escape') {
-            cancel(priority, renameInput);
+            cancel(priority);
+        } else {
+            // TODO: update the name in the database
         }
     };
     return renameInput;
@@ -78,7 +83,7 @@ const generateSaveButtonAndRenameInput = (priority: TPriority): [HTMLButtonEleme
     const saveButton: HTMLButtonElement = document.createElement('button');
     setContent(saveButton, '💾');
     saveButton.setAttribute('aria-label', `Save name change for "${priority.name}"`);
-    saveButton.onclick = () => {
+    saveButton.onclick = (event: MouseEvent) => {
         const value: string = renameInput.value.trim();
 
         const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
@@ -86,7 +91,10 @@ const generateSaveButtonAndRenameInput = (priority: TPriority): [HTMLButtonEleme
         updatedPriority.name = value;
         updatedPriority.id = generateIdFromString(value);
         updatedPriority.isBeingEdited = false;
-        update(updatedGroup, saveButton);
+
+        const container: HTMLLIElement | null = (event.target as HTMLButtonElement).closest('li');
+        const cssSelector: string | null = container && `${cssPath(container, false)} > button:nth-child(2)`;
+        updateAndDirectFocus(updatedGroup, cssSelector);
     };
 
     return [saveButton, renameInput];
@@ -104,10 +112,19 @@ const generateRangeInput = (priority: TPriority): HTMLInputRangeElement => {
         const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
         const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
         updatedPriority.weight = rangeInput.valueAsNumber;
-        update(updatedGroup, rangeInput);
+
+        updateAndPreserveFocus(updatedGroup);
     };
 
     return rangeInput;
+};
+
+const crementPriority = (priority: TPriority, newWeight: number) => {
+    const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
+    const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
+    updatedPriority.weight = newWeight;
+
+    updateAndPreserveFocus(updatedGroup);
 };
 
 const generateCrementButton = (priority: TPriority, crement: TCrement): HTMLButtonElement => {
@@ -115,12 +132,9 @@ const generateCrementButton = (priority: TPriority, crement: TCrement): HTMLButt
     crementButton.append(crement.icon);
     crementButton.setAttribute('aria-label', `${crement.stepAction} "${priority.name}"`);
     crementButton.onclick = () => {
-        const newWeight = priority.weight + crement.stepValue;
+        const newWeight: number = priority.weight + crement.stepValue;
         if (isBetween('0<=', newWeight, `<=${priority.weight + group.remainingWeight}`)) {
-            const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
-            const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
-            updatedPriority.weight = newWeight;
-            update(updatedGroup, crementButton);
+            crementPriority(priority, newWeight);
         }
     };
     return crementButton;
@@ -136,13 +150,14 @@ const generateRenameButtonAndLabel = (priority: TPriority) => {
     const renameButton: HTMLButtonElement = document.createElement('button');
     setContent(renameButton, '✏️');
     renameButton.setAttribute('aria-label', `Rename "${priority.name}"`);
-    renameButton.onclick = (event: Event) => {
+    renameButton.onclick = (event: MouseEvent) => {
         const updatedGroup: TGroup = deepCloneObject(group) as TGroup;
         const updatedPriority: TPriority = findPriority(updatedGroup, priority.id);
         updatedPriority.isBeingEdited = true;
+
         const container: HTMLLIElement | null = (event.target as HTMLButtonElement).closest('li');
-        const elementToFocus: string = container ? `${cssPath(container)} > input[type="text"]` : '';
-        update(updatedGroup, elementToFocus);
+        const cssSelector: string | null = container && `${cssPath(container)} > input[type="text"]`;
+        updateAndDirectFocus(updatedGroup, cssSelector);
     };
 
     const label: HTMLLabelElement = document.createElement('label');
@@ -172,7 +187,6 @@ const renderPriorityBeingEdited = (priority: TPriority, crements: TCrements): HT
 const renderPriority = (priority: TPriority, crements: TCrements): HTMLLIElement => {
     const priorityItem: HTMLLIElement = document.createElement('li');
     priorityItem.id = priority.id;
-    priorityItem.tabIndex = -1;
     priorityItem.append(
         generateDeleteButton(priority),
         ...generateRenameButtonAndLabel(priority),
@@ -207,7 +221,7 @@ const setMinWidth = () => {
         .reduce((current: number, next: number) => current > next ? current : next, 0) + 'px'
     labels.forEach((label: HTMLLabelElement) => label.style.minWidth = longestLabelLength);
     
-    const inputs: HTMLInputElement[] = [...priorityList.querySelectorAll('li > input')] as HTMLInputElement[];
+    const inputs: HTMLInputElement[] = [...priorityList.querySelectorAll('li > input[type="text"]')] as HTMLInputElement[];
     inputs.forEach((input: HTMLInputElement) => input.style.minWidth = longestLabelLength);
 };
 
