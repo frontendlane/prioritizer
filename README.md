@@ -6,13 +6,11 @@ Live at https://frontendlane.github.io/prioritizer/
 # Todo
 
 ## bugs
-- crementing after changing priority name and not having saved the change causes the new name to disappear 
 - focus should only be seen when navigating via keyboard: `:focus-visible`, `:-moz-focusring`
-- pressing ENTER on rename input should save
-    - put a <form> inside each <li>
-- new name must be required to save
 - undo should revert project name change
 - set an upper limit to the max-width on labels
+- return caret when renaming priority
+- buttons for each priority don't work in browsers other than firefox
 
 ## typescript
 - use typescript generics for deep clone: https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkt
@@ -21,6 +19,7 @@ Live at https://frontendlane.github.io/prioritizer/
 - add SASS
 
 ## code quality
+- instead of calling handleCancel directly from rendering call requestSubmit on cancelButton
 - remove duplicate type on 'as', use optional chaining instead
 - format document on save
 - add ESLint

@@ -6,11 +6,16 @@ export interface ClickEvent extends MouseEvent {
     explicitOriginalTarget: HTMLButtonElement | HTMLInputElement;
 }
 
+export interface SubmitEvent extends Event {
+    submitter: HTMLButtonElement | HTMLInputElement;
+}
+
 export type FocusableHTMLElement = HTMLButtonElement | HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
 export type TPriority = {
     id: string,
     name: string,
+    previousSavedName: string,
     weight: number,
     isBeingEdited: boolean
 };

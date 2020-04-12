@@ -44,7 +44,7 @@ export const updateAndRewindFocus = (updatedGroup) => {
     const elementToFocus = getMostRecentFocusableElement();
     focus(elementToFocus);
 };
-const init = () => fetch(`${location.href}data/initial-data.json`)
+const init = () => fetch(`${location.protocol}//${location.host + location.pathname}data/initial-data.json`)
     .then(response => response.json())
     .then((data) => {
     priorityList.classList.add('done-fetching');
