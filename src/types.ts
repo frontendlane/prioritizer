@@ -20,6 +20,13 @@ export type TPriority = {
     isBeingEdited: boolean
 };
 
+export interface IPriority {
+    id?: string,
+    name?: string,
+    weight?: number,
+    isBeingEdited?: boolean
+}
+
 export type TPrioritySlimRatio = {
     id: string,
     name: string,
@@ -28,19 +35,14 @@ export type TPrioritySlimRatio = {
     slimRatio: number
 };
 
-export interface IPriority {
-    id?: string,
-    name?: string,
-    weight?: number,
-    isBeingEdited?: boolean
-}
-
 export type TGroup = {
+    name: string;
     priorities: TPriority[],
     remainingWeight: number
 };
 
 export interface IGroup {
+    name?: string;
     priorities?: TPriority[],
     remainingWeight?: number
 }

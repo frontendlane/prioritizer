@@ -1,7 +1,7 @@
 /* reusables */
 :root {
     --natural-text-padding: 1ex 1ch;
-    --natural-line-height: 1.2;
+    --minimum-touch-area-size: 44px;
 }
 
 /* resets */
@@ -15,7 +15,8 @@ button, input {
 
 /* generics */
 button {
-    padding: var(--natural-text-padding);
+    min-height: var(--minimum-touch-area-size);
+    min-width: var(--minimum-touch-area-size);
 }
 
 /* specifics */
@@ -28,16 +29,32 @@ body {
 header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    margin: 1rem 0;
     gap: 1rem;
 }
 
 h1 {
-    flex-grow: 0;
-    word-break: break-all;
+    flex-grow: 1;
+    overflow: auto;
+    margin: 0;
 }
 
-[aria-live="polite"][role="status"]:empty::before {
+h1:empty {
+    outline: 1px dotted black;
+}
+
+h1:empty::after {
+    content: '\A'; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
+    white-space: pre; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
+}
+
+h1 > h1 {
+    font-size: inherit;
+    display: inline;
+}
+
+p[aria-live="polite"][role="status"]:empty::before {
     content: '\a0';
 }
 

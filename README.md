@@ -7,18 +7,25 @@ Live at https://frontendlane.github.io/prioritizer/
 
 ## bugs
 - focus should only be seen when navigating via keyboard: `:focus-visible`, `:-moz-focusring`
-- undo should revert project name change
+- remove spellcheck for h1 when not in focus
+- replace screenshot with HTML dump
+- add a range input for new priorities??
 - set an upper limit to the max-width on labels
 - return caret when renaming priority
 - buttons for each priority don't work in browsers other than firefox
+- on new priority input blur, reset the form in order to remove :invalid styling
+- add support for CTRL + Z on Windows/Linux for undo
 
 ## typescript
 - use typescript generics for deep clone: https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkt
 
 ## styling
 - add SASS
+    - minify css output, remove comments
+    - get rid of generics
 
 ## code quality
+- split between TPriorityWeb, TPriorityDatabase/TPriorityStorage??
 - instead of calling handleCancel directly from rendering call requestSubmit on cancelButton
 - remove duplicate type on 'as', use optional chaining instead
 - format document on save

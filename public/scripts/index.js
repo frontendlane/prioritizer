@@ -4,6 +4,8 @@ import { cssPath } from './css-path.js';
 import { getMostRecentFocusableElement } from './focus-history.js';
 import { attachListeners } from './event-listeners.js';
 import { unrender, render, priorityList } from './rendering.js';
+import { setContent } from './utils.js';
+import { heading } from './event-listeners.js';
 export let group = new Group({});
 export const groupHistory = [];
 export const weightFactor = 3;
@@ -14,24 +16,26 @@ const calcRemainingWeight = (group) => {
         .reduce((accumulator, next) => accumulator + next, 0);
     return totalMaxWeight - usedWeight;
 };
-export const rinseDOM = (updatedGroup) => {
+export const rinseContent = (updatedGroup) => {
     group = updatedGroup;
     group.remainingWeight = calcRemainingWeight(updatedGroup);
     unrender();
     render();
+    document.title = updatedGroup.name;
 };
 const update = (updatedGroup) => {
     groupHistory.push(group);
-    rinseDOM(updatedGroup);
+    rinseContent(updatedGroup);
 };
-export const updateAndPreserveFocus = (updatedGroup) => {
+export const doAndPreserveFocus = (callback) => {
     const cssSelector = cssPath(document.activeElement);
-    update(updatedGroup);
+    callback();
     if (cssSelector) {
         const elementToFocus = document.querySelector(cssSelector);
         focus(elementToFocus);
     }
 };
+export const updateAndPreserveFocus = (updatedGroup) => doAndPreserveFocus(() => update(updatedGroup));
 export const updateAndDirectFocus = (updatedGroup, secondParameter) => {
     update(updatedGroup);
     if (secondParameter) {
@@ -47,8 +51,10 @@ export const updateAndRewindFocus = (updatedGroup) => {
 const init = () => fetch(`${location.protocol}//${location.host + location.pathname}data/initial-data.json`)
     .then(response => response.json())
     .then((data) => {
+    // TODO: maybe this needs to be on the body??
     priorityList.classList.add('done-fetching');
     updateAndPreserveFocus(new Group(data));
+    heading && setContent(heading, group.name);
     attachListeners();
 })
     .catch(console.error);

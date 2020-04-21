@@ -5,6 +5,8 @@ import { cssPath } from './css-path.js';
 import { getMostRecentFocusableElement } from './focus-history.js';
 import { attachListeners } from './event-listeners.js';
 import { unrender, render, priorityList } from './rendering.js';
+import { setContent } from './utils.js';
+import { heading } from './event-listeners.js';
 
 export let group: TGroup = new Group({});
 export const groupHistory: TGroup[] = [];
@@ -20,28 +22,31 @@ const calcRemainingWeight = (group: TGroup): number => {
     return totalMaxWeight - usedWeight;
 };
 
-export const rinseDOM = (updatedGroup: TGroup) => {
+export const rinseContent = (updatedGroup: TGroup): void => {
     group = updatedGroup;
     group.remainingWeight = calcRemainingWeight(updatedGroup);
     unrender();
     render();
+    document.title = updatedGroup.name;
 };
 
-const update = (updatedGroup: TGroup) => {
+const update = (updatedGroup: TGroup): void => {
     groupHistory.push(group);
-    rinseDOM(updatedGroup);
+    rinseContent(updatedGroup);
 };
 
-export const updateAndPreserveFocus = (updatedGroup: TGroup) => {
+export const doAndPreserveFocus = (callback: () => any): void => {
     const cssSelector: string | null = cssPath(document.activeElement);
-    update(updatedGroup);
+    callback();
     if (cssSelector) {
         const elementToFocus: HTMLElement | null = document.querySelector(cssSelector);
         focus(elementToFocus);
     }
 };
 
-export const updateAndDirectFocus = (updatedGroup: TGroup, secondParameter: string | null) => {
+export const updateAndPreserveFocus = (updatedGroup: TGroup) => doAndPreserveFocus(() => update(updatedGroup));
+
+export const updateAndDirectFocus = (updatedGroup: TGroup, secondParameter: string | null): void => {
     update(updatedGroup);
     if (secondParameter) {
         const elementToFocus: HTMLElement | null = document.querySelector(secondParameter);
@@ -49,7 +54,7 @@ export const updateAndDirectFocus = (updatedGroup: TGroup, secondParameter: stri
     }
 };
 
-export const updateAndRewindFocus = (updatedGroup: TGroup) => {
+export const updateAndRewindFocus = (updatedGroup: TGroup): void => {
     update(updatedGroup);
     const elementToFocus: HTMLElement = getMostRecentFocusableElement();
     focus(elementToFocus);
@@ -58,8 +63,10 @@ export const updateAndRewindFocus = (updatedGroup: TGroup) => {
 const init = () => fetch(`${location.protocol}//${location.host+location.pathname}data/initial-data.json`)
     .then(response => response.json())
     .then((data: TGroup) => {
+        // TODO: maybe this needs to be on the body??
         priorityList.classList.add('done-fetching');
         updateAndPreserveFocus(new Group(data));
+        heading && setContent(heading, group.name);
         attachListeners();
     })
     .catch(console.error);
