@@ -32,7 +32,7 @@ export const generateRangeInput = (priority: TPriority): HTMLInputRangeElement =
     rangeInput.type = 'range';
     rangeInput.id = `${priority.id}-range`;
     rangeInput.name = priority.name;
-    rangeInput.value = String(priority.weight);
+    rangeInput.setAttribute('value', String(priority.weight));
     rangeInput.min = '0';
     rangeInput.max = String(priority.weight + group.remainingWeight);
     rangeInput.addEventListener('change', () => {

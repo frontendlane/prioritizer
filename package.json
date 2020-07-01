@@ -2,11 +2,12 @@
   "name": "prioritizer",
   "version": "1.0.0",
   "description": "Tool that helps you get your priorities straight!",
-  "main": "index.js",
+  "main": "./public/scripts/client/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile-once": "rm -r ./public/scripts/*.js && npx tsc",
-    "compile-watch": "rm -r ./public/scripts/*.js && npx tsc --watch"
+    "build": "rm -rf ./public/scripts && npx tsc && npx ts-node ./src/server/sample-page-generator.ts",
+    "dev": "rm -rf ./public/scripts && npx tsc --watch",
+    "reinstall": "rm -rf ./node_modules && PUPPETEER_PRODUCT=firefox npm install"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,11 @@
     "url": "https://github.com/frontendlane/prioritizer/issues"
   },
   "homepage": "https://github.com/frontendlane/prioritizer#readme",
-  "dependencies": {
+  "devDependencies": {
+    "@types/node": "^13.13.4",
+    "@types/puppeteer": "^3.0.1",
+    "puppeteer": "^4.0.1",
+    "ts-node": "^8.9.1",
     "typescript": "^3.8.3"
   }
 }

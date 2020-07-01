@@ -60,10 +60,9 @@ export const updateAndRewindFocus = (updatedGroup: TGroup): void => {
     focus(elementToFocus);
 };
 
-const init = () => fetch(`${location.protocol}//${location.host+location.pathname}data/initial-data.json`)
+const init = () => fetch(`${location.protocol}//${location.host}/public/sample-data.json`)
     .then(response => response.json())
     .then((data: TGroup) => {
-        // TODO: maybe this needs to be on the body??
         priorityList.classList.add('done-fetching');
         updateAndPreserveFocus(new Group(data));
         heading && setContent(heading, group.name);
