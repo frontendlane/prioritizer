@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer');
 puppeteer.launch({ product: 'firefox' }).then(async (browser: any) => {
     const samplePage: any = await browser.newPage();
     await samplePage.goto('localhost:5500');
-    await samplePage.waitFor('.done-fetching');
+    await samplePage.waitFor('.done-loading');
     await samplePage.evaluate((): void => {
         const replaceNoscriptCss = (): void => {
             const head: HTMLHeadElement | null = document.querySelector('head');

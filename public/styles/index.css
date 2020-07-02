@@ -101,11 +101,11 @@ ul.in-edit-mode > li.being-edited:focus-within::before {
     box-shadow: 0 0 .5rem 1px black;
 }
 
-.done-fetching:empty {
+.done-loading:empty {
     position: relative;
 }
 
-.done-fetching:empty::after {
+.done-loading:empty::after {
     content: 'No priorities means everything\'s equally important and that never works. \A Add your first priority above'; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
     white-space: pre; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
     position: absolute;

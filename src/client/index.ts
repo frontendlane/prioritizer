@@ -1,4 +1,4 @@
-import { TGroup, TPriority } from './types';
+import { TGroup, IGroup, TPriority } from './types';
 import { Group } from './Group.js';
 import { normalizeFocus, focus } from './focus-normalizer.js';
 import { cssPath } from './css-path.js';
@@ -7,8 +7,9 @@ import { attachListeners } from './event-listeners.js';
 import { unrender, render, priorityList } from './rendering.js';
 import { setContent } from './utils.js';
 import { heading } from './event-listeners.js';
+import { storage } from './storage.js';
 
-export let group: TGroup = new Group({});
+export let group: TGroup = new Group({} as IGroup);
 export const groupHistory: TGroup[] = [];
 
 export const weightFactor: number = 3;
@@ -33,6 +34,7 @@ export const rinseContent = (updatedGroup: TGroup): void => {
 const update = (updatedGroup: TGroup): void => {
     groupHistory.push(group);
     rinseContent(updatedGroup);
+    storage.save();
 };
 
 export const doAndPreserveFocus = (callback: () => any): void => {
@@ -60,15 +62,31 @@ export const updateAndRewindFocus = (updatedGroup: TGroup): void => {
     focus(elementToFocus);
 };
 
-const init = () => fetch(`${location.protocol}//${location.host + (location.pathname.endsWith('/') ? location.pathname : '/')}public/sample-data.json`)
-    .then(response => response.json())
-    .then((data: TGroup) => {
-        priorityList.classList.add('done-fetching');
-        updateAndPreserveFocus(new Group(data));
-        heading && setContent(heading, group.name);
-        attachListeners();
-    })
-    .catch(console.error);
+const load = (group: TGroup): void => {
+    priorityList.classList.add('done-loading');
+    updateAndPreserveFocus(group);
+    heading && setContent(heading, group.name);
+    attachListeners();
+};
+
+const loadSavedData = (savedData: string): void => {
+    try {
+        load(JSON.parse(savedData));
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const fetchSampleData = (): Promise<void> =>
+    fetch(`${location.protocol}//${location.host + (location.pathname.endsWith('/') ? location.pathname : '/')}public/sample-data.json`)
+        .then((response: Response) => response.json())
+        .then((data: IGroup) => load(new Group(data)))
+        .catch(console.error);
+
+const init = (): void => {
+    const savedData: string = storage.load();
+    savedData ? loadSavedData(savedData) : fetchSampleData();
+};
 
 normalizeFocus();
 init();
