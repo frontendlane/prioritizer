@@ -8,9 +8,13 @@ export const removeContent = (element: HTMLElement) => {
     }
 };
 
-export const setContent = (element: HTMLElement, content: string) => {
+export const setContent = (element: HTMLElement, content: string | (string | Element)[]) => {
     removeContent(element);
-    element.append(content);
+    if (typeof content === 'string') {
+        element.append(content);
+    } else {
+        element.append(...content);
+    }
 };
 
 export const findPriority = (group: TGroup, id: string): TPriority =>

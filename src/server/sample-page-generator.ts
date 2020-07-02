@@ -18,26 +18,22 @@ puppeteer.launch({ product: 'firefox' }).then(async (browser: any) => {
         };
 
         const setNotification = (): void => {
-            const notification = document.createDocumentFragment();
-            const br: HTMLBRElement = document.createElement('br');
-            br.style.marginBottom = '1rem';
             const a: HTMLAnchorElement = document.createElement('a');
             a.append('home page');
             a.href = './';
-            notification.append('This is a static sample page for users who have JavaScript disabled. Buttons are disabled because they require JavaScript to work, but you can change the heading.', br , 'If you have JavaScript enabled, go to the ', a, ' for the interactive version on the app.');
-            document.querySelector('p[aria-live="polite"][role="status"]')?.append(notification);
+            document.querySelector('p[aria-live="polite"][role="status"]')?.append('This is a static sample page for users who have JavaScript disabled. Buttons are disabled because they require JavaScript to work, but you can change the heading.\n\nIf you have JavaScript enabled, go to the ', a, ' for the interactive version on the app.');
         };
 
         const disableButtons = (): void =>
-            document.querySelectorAll('button').forEach((button: HTMLButtonElement) => button.disabled = true);
+            document.querySelectorAll('button').forEach((button: HTMLButtonElement): true => button.disabled = true);
 
-        const removeLiveServerScript = (): void =>
-            document.querySelector('script[type="text/javascript"]')?.remove();
+        const removeScripts = (): void =>
+            document.querySelectorAll('script').forEach((script: HTMLScriptElement): void => script.remove());
 
         replaceNoscriptCss();
         setNotification();
         disableButtons();
-        removeLiveServerScript();
+        removeScripts();
     });
     fs.writeFileSync('./sample-page.html', await samplePage.content(), (error: any): void => console.error(error));
     await browser.close();

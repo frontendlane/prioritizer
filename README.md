@@ -25,9 +25,9 @@ Live at https://frontendlane.github.io/prioritizer/
 - make sure to start Live Server extension before `npm run build`
 
 ## Roadmap
-### 1.0: explain how to use the app
-- "what is this" button
-- "how does this work" button
+### 1.0.1: handle errors to minimize bounce
+- if error during fetch, try again in a couple of seconds. if fails for the second time, show a notice that the page will be redirected to sample-page.html and after a couple of seconds redirect to sample-page.html
+- replace console.error with `throw Error`
 
 ### 1.1: add shareability to attract users
 - make it shareable. shorten url project
@@ -76,7 +76,8 @@ Live at https://frontendlane.github.io/prioritizer/
 
 ### backlog
 #### features
-- Export, import priority list
+- installable app (PWA)
+- export, import priority list
 - export to .txt file
 - save as .html file
 - export to .csv file
@@ -96,8 +97,6 @@ Live at https://frontendlane.github.io/prioritizer/
 - set an upper limit to the max-width on labels
 
 #### code quality
-- if error during fetch, try again in a couple of seconds. if fails for the second time, show a notice that the page will be redirected to sample-page.html and after a couple of seconds redirect to sample-page.html
-- replace console.error with `throw Error`
 - add pre commit hook that runs `npm run build`
 - add tool that increments package.json version on each commit or create a git commit hook that checks if it was changed
 - add prettier

@@ -6,7 +6,12 @@ export const removeContent = (element) => {
 };
 export const setContent = (element, content) => {
     removeContent(element);
-    element.append(content);
+    if (typeof content === 'string') {
+        element.append(content);
+    }
+    else {
+        element.append(...content);
+    }
 };
 export const findPriority = (group, id) => group.priorities.find((priority) => priority.id === id);
 const getPrioritiesSafeForSlimming = (priorities) => priorities.filter((priority, index) => !priorities[index + 1] || (priority.weight - priorities[index + 1].weight > 1));

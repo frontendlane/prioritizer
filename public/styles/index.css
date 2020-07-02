@@ -24,9 +24,10 @@ body {
     max-width: 800px;
     margin: auto;
     font-family: Helvetica, sans-serif;
+    line-height: 1.4;
 }
 
-header {
+header > div:first-of-type {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -54,11 +55,35 @@ h1 > h1 {
     display: inline;
 }
 
+header > div:last-of-type {
+    display: flex;
+    border-bottom: 2px dashed gray;
+    justify-content: space-between;
+}
+
+details {
+    flex-basis: calc(50% - .5rem);
+}
+
+summary {
+    margin: .5rem 0;
+    cursor: pointer;
+}
+
+.formula {
+    font-style: italic;
+    white-space: nowrap;
+}
+
+p[aria-live="polite"][role="status"] {
+    white-space: pre-line;
+}
+
 p[aria-live="polite"][role="status"]:empty::before {
     content: '\a0';
 }
 
-div {
+main > div {
     text-align: right;
 }
 
@@ -67,7 +92,6 @@ div {
     min-width: 2ch;
     display: inline-block;
     height: 17px;
-    vertical-align: middle;
 }
 
 ul {

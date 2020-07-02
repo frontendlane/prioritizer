@@ -16,10 +16,10 @@ const updateProjectName = (event) => {
         ? setTimeout(() => updateAndPreserveFocus(updatedGroup), 0)
         : updateAndPreserveFocus(updatedGroup);
 };
-export const setNotification = (text) => {
+export const setNotification = (...args) => {
     const notificationBar = getNotificationBar();
     clearNotification(notificationBar);
-    setTimeout(() => notificationBar && setContent(notificationBar, text), 100);
+    setTimeout(() => notificationBar && setContent(notificationBar, args), 100);
 };
 const add = ({ id, name }, form) => {
     const updatedGroup = deepCloneObject(group);
@@ -51,7 +51,13 @@ const sort = () => {
 };
 export const attachListeners = () => {
     var _a, _b, _c;
-    document.addEventListener('click', () => clearNotification());
+    document.addEventListener('click', (event) => {
+        var _a, _b;
+        const clickEvent = event;
+        if (!((_a = clickEvent.target) === null || _a === void 0 ? void 0 : _a.matches('p[aria-live="polite"][role="status"]')) && !((_b = clickEvent.target) === null || _b === void 0 ? void 0 : _b.closest('p[aria-live="polite"][role="status"]'))) {
+            clearNotification();
+        }
+    });
     heading === null || heading === void 0 ? void 0 : heading.addEventListener('input', updateProjectName);
     (_a = document.querySelector('form')) === null || _a === void 0 ? void 0 : _a.addEventListener('submit', submitNew);
     document.addEventListener('keydown', (event) => event.metaKey && event.key === 'z' && handleUndo());

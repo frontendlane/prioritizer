@@ -1,4 +1,4 @@
-import { TGroup, TPriority } from './types';
+import { TGroup, TPriority, ClickEvent } from './types';
 import { Priority } from './Priority.js';
 import { deepCloneObject } from './deep-clone.js';
 import { generateIdFromString, removeContent, setContent } from './utils.js';
@@ -7,7 +7,7 @@ import { group, groupHistory, rinseContent, updateAndPreserveFocus, doAndPreserv
 export const heading: HTMLHeadingElement | null = document.querySelector('h1');
 
 const getNotificationBar = (): HTMLParagraphElement | null => document.querySelector('p[aria-live="polite"][role="status"]');
-const clearNotification = (notificationBar = getNotificationBar()) => notificationBar && removeContent(notificationBar);
+const clearNotification = (notificationBar = getNotificationBar()): void | null => notificationBar && removeContent(notificationBar);
 
 const updateProjectName = (event: Event) => {
     const inputEvent: InputEvent = event as InputEvent;
@@ -21,10 +21,10 @@ const updateProjectName = (event: Event) => {
         : updateAndPreserveFocus(updatedGroup);
 };
 
-export const setNotification = (text: string) => {
+export const setNotification = (...args : (string | Element)[]) => {
     const notificationBar = getNotificationBar();
     clearNotification(notificationBar);
-    setTimeout(() => notificationBar && setContent(notificationBar, text), 100);
+    setTimeout(() => notificationBar && setContent(notificationBar, args), 100);
 };
 
 const add = ({id, name}: {id: string, name: string}, form: HTMLFormElement) => {
@@ -62,10 +62,15 @@ const sort = () => {
 };
 
 export const attachListeners = () => {
-    document.addEventListener('click', () => clearNotification());
+    document.addEventListener('click', (event: Event): void => {
+        const clickEvent: ClickEvent = event as ClickEvent;
+        if (!(clickEvent.target as Element)?.matches('p[aria-live="polite"][role="status"]') && !(clickEvent.target as Element)?.closest('p[aria-live="polite"][role="status"]')) {
+            clearNotification();
+        }
+    });
     heading?.addEventListener('input', updateProjectName);
     document.querySelector('form')?.addEventListener('submit', submitNew);
-    document.addEventListener('keydown', (event: KeyboardEvent) => event.metaKey && event.key === 'z' && handleUndo());
+    document.addEventListener('keydown', (event: KeyboardEvent): void | false => event.metaKey && event.key === 'z' && handleUndo());
     document.getElementById('undo')?.addEventListener('click', handleUndo);
     document.getElementById('sort')?.addEventListener('click', sort);
 };

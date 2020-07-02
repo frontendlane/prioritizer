@@ -12,8 +12,7 @@ export const focus = (element: HTMLElement | null) => {
 export const normalizeFocus = (): void => {
     document.addEventListener('click', (event: MouseEvent): void => {
         const clickEvent: ClickEvent = event as ClickEvent;
-        // @ts-ignore
-        if (clickEvent.target.matches('button, input, textarea, select, [contenteditable]')) {
+        if ((clickEvent.target as Element).matches('button, input, textarea, select, [contenteditable]')) {
             const elementToFocus: FocusableHTMLElement = clickEvent.explicitOriginalTarget || clickEvent.target;
             focus(elementToFocus);
         }
