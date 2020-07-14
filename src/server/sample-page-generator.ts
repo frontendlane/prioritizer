@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer');
 puppeteer.launch({ product: 'firefox' }).then(async (browser: any) => {
     const samplePage: any = await browser.newPage();
     await samplePage.goto('localhost:5500');
-    await samplePage.waitFor('.done-loading');
+    await samplePage.waitFor('.load-success');
     await samplePage.evaluate((): void => {
         const replaceNoscriptCss = (): void => {
             const head: HTMLHeadElement | null = document.querySelector('head');
@@ -18,10 +18,12 @@ puppeteer.launch({ product: 'firefox' }).then(async (browser: any) => {
         };
 
         const setNotification = (): void => {
-            const a: HTMLAnchorElement = document.createElement('a');
-            a.append('home page');
-            a.href = './';
-            document.querySelector('p[aria-live="polite"][role="status"]')?.append('This is a static sample page for users who have JavaScript disabled. Buttons are disabled because they require JavaScript to work, but you can change the heading.\n\nIf you have JavaScript enabled, go to the ', a, ' for the interactive version on the app.');
+            const homePage: HTMLAnchorElement = document.createElement('a');
+            homePage.append('home page');
+            homePage.href = './';
+            const em: HTMLElement = document.createElement('em');
+            em.append('can');
+            document.querySelector('p[aria-live="polite"][role="status"]')?.append('This is a static version of the ', homePage, '. Buttons are disabled because they require JavaScript to work, but you ', em,' change the heading.');
         };
 
         const disableButtons = (): void =>

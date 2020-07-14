@@ -1,5 +1,12 @@
 input[type="range"],
 button,
-p {
+header > div:last-of-type,
+main > div > p,
+main > form {
     display: none;
+}
+
+li:not(:last-of-type) {
+    border-bottom: 1px dashed gray;
+    break-inside: avoid;
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Project priorities</title>
+    <title>Prioritizer</title>
     <link rel="stylesheet" href="./public/styles/index.css">
     <link rel="stylesheet" href="./public/styles/print.css" media="print">
     <script src="./public/scripts/client/index.js" type="module"></script>
@@ -18,7 +18,14 @@
 
     <header>
         <div>
-            <h1 contenteditable="true">Loading...</h1>
+            <h1 contenteditable="true">
+                Loading
+                <div contenteditable="false" aria-hidden="true">
+                    <span>.</span>
+                    <span>.</span>
+                    <span>.</span>
+                </div>
+            </h1>
             <button onclick="print()">Print</button>
         </div>
         <div>
@@ -32,9 +39,9 @@
             <details>
                 <summary>How does it work?</summary>
                 <div>
-                    <p>When you first open the app it shows a list of sample project priorities. Initially, they are ranked from most important to least important using their weight (located toward the end of each row). Weights are distributed by dragging the slider and pressing decrement and increment buttons. At the top of the page is a number next to "Remaining weight" that indicates how much weight you have left to distribute. Note that you don't have to allocate all of it. Total weight depends on the number of priorities. The formula is <span class="formula"><var>numberOfPriorities</var> &times; 3 = <var>totalWeight</var></span>.</p>
-                    <p>This app doesn't have "Create an account" or "Register" buttons because those would require a database. I value privacy and anonimity on the web and I don't want the responsibility of handling someone's data. Instead, I do something different. Every time you change something the data is saved to browser's memory (<code>localStorage</code>) so don't worry about closing/restarting the page. The plus side of this approach is that you don't have to spend time registering/logging in. Double win! 🎊</p>
-                    <p>Feel free to play around with the sample data or delete existing priorities and start adding your own. If you have any suggestions feel free to shoot me an email at <a href="mailto:petar@frontendlane.com">petar@frontendlane.com</a>.</p>
+                    <p>When you first open the app it shows a list of sample project priorities. Initially, they are ranked from most to least important using their weight (located toward the end of each row). Weight is distributed by dragging the slider and pressing decrement and increment buttons. At the top of the page is a number next to "Remaining weight" that indicates how much weight you have left to distribute. Note that you don't have to allocate all of it. Total weight depends on the number of priorities. The formula is <span class="formula"><var>numberOfPriorities</var> &times; 3 = <var>totalWeight</var></span>.</p>
+                    <p>This app doesn't have "Create an account" or "Register" buttons because those would require a database. I value privacy and anonimity on the web and I don't want the responsibility of handling someone's data. Instead, I do something different. Every time you change something, the data is saved to browser's memory (<code>localStorage</code>) so don't worry about closing/restarting the page. The plus side of this approach is that you don't have to spend time registering/logging in. Double win! 🎊</p>
+                    <p>Feel free to play around with the sample data below or delete existing priorities and start adding your own. If you have any suggestions feel free to shoot me an email at <a href="mailto:petar@frontendlane.com">petar@frontendlane.com</a>.</p>
                     <p>PS: It's not obvious, but you can change the project name at the very top of the page. 🙃</p>
                 </div>
             </details>

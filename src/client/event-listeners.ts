@@ -21,7 +21,7 @@ const updateProjectName = (event: Event) => {
         : updateAndPreserveFocus(updatedGroup);
 };
 
-export const setNotification = (...args : (string | Element)[]) => {
+export const setNotification = (...args : (string | Element | DocumentFragment)[]) => {
     const notificationBar = getNotificationBar();
     clearNotification(notificationBar);
     setTimeout(() => notificationBar && setContent(notificationBar, args), 100);

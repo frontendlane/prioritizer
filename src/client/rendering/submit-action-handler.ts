@@ -21,7 +21,7 @@ const confirmSlimming = (priority: TPriority): void => {
     const shouldAutoSlim: boolean = confirm(`"${priority.name}"'s weight is being used on other priorities. To ensure priorities maintain their relative importance you should free up ${weightToSlim} weight from other priorities. Prioritizer can automaticaly remove this weight but this may change relative importance of your priorities. Do you want Prioritizer to automatically free up weight?`);
     shouldAutoSlim
         ? deletePriorityAndSlim(priority.id, weightToSlim)
-        : setNotification(`You need to free up ${weightToSlim} weights in order to delete "${priority.name}" without Prioritizer (incorectly) automatically freeing up weights for you.`);
+        : setNotification(`You need to free up ${weightToSlim} weights in order to delete "${priority.name}" without Prioritizer (possibly incorectly) automatically freeing up weights for you.`);
 };
 
 const deletePriority = (id: string): void => {

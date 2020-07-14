@@ -35,6 +35,10 @@ header > div:first-of-type {
     gap: 1rem;
 }
 
+body:not(.load-success) header > div:first-of-type > button {
+    visibility: hidden; /* why not display: none;? because it messes up min-width on priority labels */
+}
+
 h1 {
     flex-grow: 1;
     overflow: auto;
@@ -55,6 +59,32 @@ h1 > h1 {
     display: inline;
 }
 
+h1 > div[aria-hidden="true"][contenteditable="false"] {
+    display: inline;
+}
+
+@keyframes fade-out {
+    to {
+        opacity: 0;
+    }
+}
+
+h1 > div[aria-hidden="true"][contenteditable="false"] > span:nth-of-type(1) {
+    animation: fade-out .45s .0s infinite alternate;
+}
+h1 > div[aria-hidden="true"][contenteditable="false"] > span:nth-of-type(2) {
+    animation: fade-out .45s .15s infinite alternate;
+}
+h1 > div[aria-hidden="true"][contenteditable="false"] > span:nth-of-type(3) {
+    animation: fade-out .45s .3s infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    h1 > div[aria-hidden="true"][contenteditable="false"] > span {
+        animation: none;
+    }
+}
+
 header > div:last-of-type {
     display: flex;
     border-bottom: 2px dashed gray;
@@ -68,6 +98,9 @@ details {
 summary {
     margin: .5rem 0;
     cursor: pointer;
+    min-height: var(--minimum-touch-area-size);
+    line-height: var(--minimum-touch-area-size);
+    display: list-item inline flow-root; /* multi-keyword values only supported in firefox */
 }
 
 .formula {
@@ -81,6 +114,10 @@ p[aria-live="polite"][role="status"] {
 
 p[aria-live="polite"][role="status"]:empty::before {
     content: '\a0';
+}
+
+body:not(.load-success) main > *:not(p):not([aria-live="polite"]):not([role="status"]) {
+    visibility: hidden; /* why not display: none;? because it messes up min-width on priority labels */
 }
 
 main > div {
@@ -125,11 +162,11 @@ ul.in-edit-mode > li.being-edited:focus-within::before {
     box-shadow: 0 0 .5rem 1px black;
 }
 
-.done-loading:empty {
+body.load-success ul:empty {
     position: relative;
 }
 
-.done-loading:empty::after {
+body.load-success ul:empty::after {
     content: 'No priorities means everything\'s equally important and that never works. \A Add your first priority above'; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
     white-space: pre; /* https://stackoverflow.com/questions/17047694#answer-17047836 */
     position: absolute;

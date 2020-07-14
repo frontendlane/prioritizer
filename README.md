@@ -24,15 +24,27 @@ Live at https://frontendlane.github.io/prioritizer/
 - Node v13 docs: https://nodejs.org/docs/latest-v13.x/api/fs.html
 - make sure to start Live Server extension before `npm run build`
 
-## Roadmap
-### 1.0.1: handle errors to minimize bounce
-- if error during fetch, try again in a couple of seconds. if fails for the second time, show a notice that the page will be redirected to sample-page.html and after a couple of seconds redirect to sample-page.html
-- replace console.error with `throw Error`
+### Initialization scenarios
+- stored data doesn't exist
+    - sample data downloaded
+    - sample data malformed
+    - sample data cannot be downloaded (slow connection)
+    - sample data cannot be downloaded (wrong url)
+    - safari "block all cookies"
+        - sample data downloaded
+        - sample data cannot be downloaded
+- stored data exists
+    - stored data retrieved
+    - stored data malformed, sample data downloaded
+    - stored data malformed, sample data cannot be downloaded (slow internet)
+    - stored data malformed, sample data cannot be downloaded (wrong url)
 
+## Roadmap
 ### 1.1: add shareability to attract users
 - make it shareable. shorten url project
     - client-side interpretation of shortened URL params. extract the url shortener into a separate project
     - server-side interpretation of shortened URL params: node.js??
+    - generate firefox share link
 
 ### 1.2: add categories to attract users
 - group by categories?? or use tags instead??
@@ -50,6 +62,7 @@ Live at https://frontendlane.github.io/prioritizer/
 
 ### 1.2.2: improve ux to make users happy
 - slider width should indicate how much weight a priority has, or should it be indicated by some (colored) bars next to each priority
+    - in edit mode the label width is smaller and it twiddles when you enter/leave edit mode
 
 ### 1.2.3: improve ux to make users happy
 - disable crement buttons if they can't complete
@@ -75,28 +88,42 @@ Live at https://frontendlane.github.io/prioritizer/
 - once you rank projects, then order them in the chronological order from most urgent to least urgent
 
 ### backlog
+#### bugs
+- automatic weight redistribution doesn't evenly remove weight from top 3 items
+- safari workaround: `(form?.querySelector('button:nth-child(3)') as HTMLButtonElement).click();` in `form-elements.ts`
+- safari workaround: `const targetButton = submitEvent.submitter || document.activeElement;` in `submit-action-handler.ts`
+
 #### features
+- "delete stored data" button
+- "replace stored data with sample data" button
 - installable app (PWA)
 - export, import priority list
 - export to .txt file
 - save as .html file
 - export to .csv file
+- save to clipboard
+- save as .md file
 - command palete: extract into a separate library
 - create my own baseline.css
 
 #### ux
+- replace decrement and increment button icons
+- button press on safari makes button content invisible because of `:active{ color: <whatever>; }`
 - it need not only be priorities, it can be tasks as well. up to the user
     - replace sample data with real project priorities for prioritizer (optionally provide different sets of sample data)
 - on new priority input blur, reset the form in order to remove :invalid styling
 - 3 seconds after last change, check if sort order would be different and if so unobtrusively offer to re-order (but only if sort has been pressed at least once)
 - 3 seconds after reducing to 0 unobtrusively offer to remove the priority item
 - input for adding new priority should be transform: scale(1.2); when :focus
+- move "what is prioritizer" and "how does it work" to an FAQ page
 - remove spellcheck for h1 when not in focus
+- sample page should be a single html file. pack css into <style> instead of <link>ing to an external file
 - focus should only be seen when navigating via keyboard: `:focus-visible`, `:-moz-focusring`
 - add a range input for new priorities??
 - set an upper limit to the max-width on labels
 
 #### code quality
+- rename `setContent` to `replaceContent` and use .append() when adding content to a newly created element
 - add pre commit hook that runs `npm run build`
 - add tool that increments package.json version on each commit or create a git commit hook that checks if it was changed
 - add prettier
@@ -111,8 +138,10 @@ Live at https://frontendlane.github.io/prioritizer/
 - add SASS
     - minify css output, remove comments
     - get rid of "generics" in css
-- replace element removal in sample-page-generator.ts with regex substring
+- create custom `htmlContent()` instead of manually generating HTML content e.g. `document.createElement()`
+- remove HTML comments from `sample-page.html`
+- replace element removal in `sample-page-generator.ts` with regex substring
 - remove duplicate type on 'as', use optional chaining instead
 - use typescript generics for deep clone: https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkt
-- optimize tsconfig.json
+- optimize `tsconfig.json`
     - minify js

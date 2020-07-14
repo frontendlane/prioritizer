@@ -8,7 +8,7 @@ export const removeContent = (element: HTMLElement) => {
     }
 };
 
-export const setContent = (element: HTMLElement, content: string | (string | Element)[]) => {
+export const setContent = (element: HTMLElement, content: string | (string | Element | DocumentFragment)[]) => {
     removeContent(element);
     if (typeof content === 'string') {
         element.append(content);

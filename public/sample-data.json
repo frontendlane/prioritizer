@@ -1,195 +1,168 @@
 {
     "name": "Sample priorities",
-    "remainingWeight": 54,
     "priorities": [
-        {
-            "id": "ease-of-use",
-            "name": "Ease of use",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "load-speed",
-            "name": "Load speed",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "use-speed",
-            "name": "Use speed",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
         {
             "id": "privacy",
             "name": "Privacy",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "security",
-            "name": "Security",
-            "weight": 1,
-            "maxWeight": 54,
+            "weight": 15,
             "isBeingEdited": false
         },
         {
             "id": "accessibility",
             "name": "Accessibility",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "size",
-            "name": "Size",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "seo",
-            "name": "SEO",
-            "weight": 1,
-            "maxWeight": 5,
+            "weight": 9,
             "isBeingEdited": false
         },
         {
             "id": "no-javascript",
             "name": "Works w/o JavaScript",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "mobile-usable",
-            "name": "Usable on mobile",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "mobile-first",
-            "name": "Mobile first",
-            "weight": 1,
-            "maxWeight": 54,
+            "weight": 8,
             "isBeingEdited": false
         },
         {
             "id": "extensible",
             "name": "Extensible code",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "cross-browser",
-            "name": "Cross-browser",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "cross-os",
-            "name": "Cross-OS",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "legacy",
-            "name": "Legacy browsers",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "international",
-            "name": "Internationalization",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "localization",
-            "name": "Localization",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "aesthetic",
-            "name": "Aesthetically pleasing",
-            "weight": 1,
-            "maxWeight": 54,
-            "isBeingEdited": false
-        },
-        {
-            "id": "interactive",
-            "name": "Interactive",
-            "weight": 1,
-            "maxWeight": 54,
+            "weight": 5,
             "isBeingEdited": false
         },
         {
             "id": "no-externals",
             "name": "No external assets",
-            "weight": 1,
-            "maxWeight": 54,
+            "weight": 4,
             "isBeingEdited": false
         },
         {
-            "id": "portable",
-            "name": "Portable (A single HTML file)",
-            "weight": 1,
-            "maxWeight": 54,
+            "id": "security",
+            "name": "Security",
+            "weight": 4,
             "isBeingEdited": false
         },
         {
-            "id": "html-only",
-            "name": "HTML only",
-            "weight": 1,
-            "maxWeight": 54,
+            "id": "cross-browser",
+            "name": "Cross-browser",
+            "weight": 3,
             "isBeingEdited": false
         },
         {
-            "id": "responsive",
-            "name": "Responsive design",
-            "weight": 1,
-            "maxWeight": 54,
+            "id": "size",
+            "name": "Size",
+            "weight": 3,
             "isBeingEdited": false
         },
         {
-            "id": "no-dependency",
-            "name": "No dependencies",
-            "weight": 1,
-            "maxWeight": 54,
+            "id": "no-framework",
+            "name": "No JS frameworks",
+            "weight": 3,
             "isBeingEdited": false
         },
         {
-            "id": "latest-code",
-            "name": "No obsolete or deprecated code",
-            "weight": 1,
-            "maxWeight": 54,
+            "id": "legacy",
+            "name": "Legacy browsers",
+            "weight": 2,
+            "isBeingEdited": false
+        },
+        {
+            "id": "cross-os",
+            "name": "Cross-OS",
+            "weight": 2,
             "isBeingEdited": false
         },
         {
             "id": "no-globals",
             "name": "No global variables",
             "weight": 1,
-            "maxWeight": 54,
             "isBeingEdited": false
         },
         {
-            "id": "no-framework",
-            "name": "No JS frameworks",
+            "id": "latest-code",
+            "name": "No obsolete or deprecated code",
             "weight": 1,
-            "maxWeight": 54,
+            "isBeingEdited": false
+        },
+        {
+            "id": "no-dependency",
+            "name": "No dependencies",
+            "weight": 1,
+            "isBeingEdited": false
+        },
+        {
+            "id": "responsive",
+            "name": "Responsive design",
+            "weight": 1,
+            "isBeingEdited": false
+        },
+        {
+            "id": "interactive",
+            "name": "Interactive",
+            "weight": 1,
+            "isBeingEdited": false
+        },
+        {
+            "id": "mobile-usable",
+            "name": "Usable on mobile",
+            "weight": 1,
+            "isBeingEdited": false
+        },
+        {
+            "id": "use-speed",
+            "name": "Use speed",
+            "weight": 1,
+            "isBeingEdited": false
+        },
+        {
+            "id": "load-speed",
+            "name": "Load speed",
+            "weight": 1,
+            "isBeingEdited": false
+        },
+        {
+            "id": "ease-of-use",
+            "name": "Ease of use",
+            "weight": 1,
+            "isBeingEdited": false
+        },
+        {
+            "id": "html-only",
+            "name": "HTML only",
+            "weight": 0,
+            "isBeingEdited": false
+        },
+        {
+            "id": "portable",
+            "name": "Portable (A single HTML file)",
+            "weight": 0,
+            "isBeingEdited": false
+        },
+        {
+            "id": "aesthetic",
+            "name": "Aesthetically pleasing",
+            "weight": 0,
+            "isBeingEdited": false
+        },
+        {
+            "id": "localization",
+            "name": "Localization",
+            "weight": 0,
+            "isBeingEdited": false
+        },
+        {
+            "id": "international",
+            "name": "Internationalization",
+            "weight": 0,
+            "isBeingEdited": false
+        },
+        {
+            "id": "mobile-first",
+            "name": "Mobile first",
+            "weight": 0,
+            "isBeingEdited": false
+        },
+        {
+            "id": "seo",
+            "name": "SEO",
+            "weight": 0,
             "isBeingEdited": false
         }
-    ]
+    ],
+    "remainingWeight": 14
 }
